@@ -474,9 +474,16 @@ const BUILTIN_CONTACTS = [
   { id:22, tier:'ambassador', name:'Dalton Kile',   initials:'DK', av:'#fde8ef', avc:'#b05070', role:'Associate, Susser Bank | MSF 2025',                       tags:['ambassador'],    contact:'LinkedIn',    why:'Responded positively. Follow up Monday to schedule call.', note:'Responded positively. Follow up Monday to schedule.', message:'Thank you so much Dalton, really appreciate it! Would sometime next week work for a quick call? Happy to work around your schedule.' }
 ];
 
-// 5=Done: Michael Cox(5), Nicolas Liva(14), Jesse Davila(15)
-const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:5,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:5,15:5,16:3,17:1,18:4,19:1,20:1,21:2,22:3};
-const DEFAULT_NOTES = {5:'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',14:'Available Thu or Fri this week. Confirming time.',18:'Confirmed call next week. Follow up Monday to schedule.',16:'Reach out Monday to schedule.',22:'Responded positively. Follow up Monday to schedule.'};
+// 5=Done: Michael Cox(5), Nicolas Liva(14), Jesse Davila(15) | 4=Call booked: Nick(18), William(16)
+const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:5,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:5,15:5,16:4,17:1,18:4,19:1,20:1,21:2,22:3};
+const DEFAULT_NOTES = {
+  5:  'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',
+  14: 'Call done May 27. Now at Pimco Austin. RJ practicum first choice. Oil & gas IB realistic path. Meet Suzanne week 1.',
+  15: 'Call done May 30. CDS background = perfect for M&A per Jesse. Recruiting peaks Sep–Oct. Ohio State Sep 12 — he may come to Austin for Deloitte recruitment.',
+  16: 'Call booked Wed Jun 4 or Thu Jun 5 at 3pm CST. Send calendar invite to wgage@wolferesearch.com. Call him at +1 337 532 2706.',
+  18: 'Call TODAY Jun 3 at 1:30pm CST via WhatsApp. His number: +1 517 940 2488.',
+  22: 'Postponed — Jisha outside US timezone. Follow up ~Jun 16 when back in US.'
+};
 
 /* ── Supabase ── */
 const SUPA_URL = 'https://yzcbhfxzodvpctzmsjow.supabase.co';
@@ -669,23 +676,22 @@ function overdueLabel(id) {
 
 /* ── Calendar data (dynamic) ── */
 let CALENDAR_EVENTS = [
-  { day:'Tomorrow', date:'Wed Jun 3', events:[
-    {type:'call', title:'Call: Nick Bryngelson', sub:'IB Analyst, Raymond James Houston Energy', time:'1:30 PM CST'},
-    {type:'reminder', title:'Call prep: Nick Bryngelson', sub:'Ask about recruiting timeline, resume tips, how RJ practicum helped, what he\'d do differently'},
+  { day:'Today', date:'Wed Jun 3', events:[
+    {type:'call', title:'Call: Nick Bryngelson', sub:'WhatsApp · +1 517 940 2488', time:'1:30 PM CST'},
+    {type:'reminder', title:'Call prep: Nick Bryngelson', sub:'How he navigated MSF recruiting, RJ practicum, what to do before program starts, resume tips'},
   ]},
-  { day:'This Week', date:'Jun 3–6', events:[
-    {type:'followup', title:'Schedule: William Gage', sub:'Message to lock in a time this week or next'},
-    {type:'followup', title:'Schedule: Dalton Kile', sub:'Follow up — he responded positively'},
-    {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if no reply in 7d'},
+  { day:'This Week', date:'Wed–Thu Jun 4–5', events:[
+    {type:'call', title:'Call: William Gage', sub:'Send calendar invite to wgage@wolferesearch.com · call +1 337 532 2706', time:'3:00 PM CST'},
+    {type:'reminder', title:'Send calendar invite to William', sub:'Wed Jun 4 or Thu Jun 5 at 3pm — do this now'},
+    {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if 7+ days no reply'},
   ]},
-  { day:'Next Week', date:'Jun 9+', events:[
-    {type:'call', title:'Call: William Gage', sub:'Equity Research Associate, Wolfe Research', time:'TBD'},
-    {type:'call', title:'Call: Dalton Kile', sub:'Associate, Susser Bank', time:'TBD'},
+  { day:'In 2 Weeks', date:'~Jun 16+', events:[
+    {type:'followup', title:'Follow up: Dalton Kile', sub:'Reach out once back in US timezone — he suggested waiting'},
   ]},
   { day:'Calls Done ✓', date:'May 27–30', events:[
-    {type:'call', title:'✓ Michael Cox — Seabury Group', sub:'Restructuring IB. Offered intro at graduation. Sign up for his practicum.'},
-    {type:'call', title:'✓ Nicolas Liva — Pimco', sub:'Oil & gas IB is realistic path. RJ practicum first choice. Meet Suzanne week 1.'},
-    {type:'call', title:'✓ Jesse Davila — Deloitte', sub:'CDS background is perfect for M&A. Recruiting peaks Sep–Oct. Ohio State game Sep 12.'},
+    {type:'call', title:'✓ Michael Cox — Seabury Group', sub:'Offered intro at graduation. Sign up for his practicum in fall.'},
+    {type:'call', title:'✓ Nicolas Liva — Pimco', sub:'RJ practicum = first choice. Oil & gas IB realistic. Meet Suzanne week 1.'},
+    {type:'call', title:'✓ Jesse Davila — Deloitte', sub:'CDS background is perfect. Recruiting peaks Sep–Oct. Ohio State Sep 12.'},
   ]},
 ];
 
