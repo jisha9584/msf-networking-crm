@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="NetCRM">
 <title>NetCRM — MSF Networking</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --bg:       #f7f4ef;
@@ -476,8 +477,13 @@ const BUILTIN_CONTACTS = [
 const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:5,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:3,15:4,16:3,17:1,18:3,19:1,20:1,21:2,22:3};
 const DEFAULT_NOTES = {5:'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',14:'Available Thu or Fri this week. Confirming time.',18:'Confirmed call next week. Follow up Monday to schedule.',16:'Reach out Monday to schedule.',22:'Responded positively. Follow up Monday to schedule.'};
 
+/* ── Supabase ── */
+const SUPA_URL = 'https://yzcbhfxzodvpctzmsjow.supabase.co';
+const SUPA_KEY = 'sb_publishable_IALxcQpXxVdQfi-lKNUwFQ_3KhTUQPf';
+const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
 /* ── State ── */
-function loadState() {
+function loadLocalState() {
   try {
     return {
       steps:   JSON.parse(localStorage.getItem('netcrm_steps'))   || {...DEFAULT_STEPS},
@@ -489,7 +495,8 @@ function loadState() {
     };
   } catch(e) { return {steps:{...DEFAULT_STEPS},notes:{...DEFAULT_NOTES},apiKey:'',custom:[],starred:{},moved:{}}; }
 }
-function saveState() {
+
+function saveLocalState() {
   try {
     localStorage.setItem('netcrm_steps',   JSON.stringify(stepMap));
     localStorage.setItem('netcrm_notes',   JSON.stringify(notesMap));
@@ -500,13 +507,111 @@ function saveState() {
   } catch(e) {}
 }
 
-const st = loadState();
+// Save to localStorage immediately, then sync to Supabase in background
+function saveState() {
+  saveLocalState();
+}
+
+// Sync a single contact's state to Supabase
+async function syncContact(id) {
+  try {
+    await db.from('contact_states').upsert({
+      contact_id: id,
+      step:      stepMap[id] || 0,
+      notes:     notesMap[id] || '',
+      starred:   !!starredMap[id],
+      moved_at:  movedMap[id] || 0,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'contact_id' });
+  } catch(e) { console.warn('Supabase sync failed for contact', id, e); }
+}
+
+// Sync a custom contact to Supabase
+async function syncCustomContact(c) {
+  try {
+    await db.from('custom_contacts').upsert({
+      id: c.id, name: c.name, role: c.role, tier: c.tier,
+      tags: c.tags, contact_method: c.contact, why: c.why,
+      note: c.note, message: c.message,
+      initials: c.initials, avatar_bg: c.av, avatar_fg: c.avc
+    }, { onConflict: 'id' });
+    // Also create initial state row
+    await db.from('contact_states').upsert({
+      contact_id: c.id, step: 0, notes: notesMap[c.id]||'',
+      starred: false, moved_at: 0, updated_at: new Date().toISOString()
+    }, { onConflict: 'contact_id' });
+  } catch(e) { console.warn('Supabase custom contact sync failed', e); }
+}
+
+async function deleteFromSupabase(id) {
+  try {
+    await db.from('custom_contacts').delete().eq('id', id);
+    await db.from('contact_states').delete().eq('contact_id', id);
+  } catch(e) { console.warn('Supabase delete failed', e); }
+}
+
+async function syncCalendarReminder(event) {
+  try {
+    await db.from('calendar_reminders').insert({
+      type: event.type, title: event.title,
+      sub: event.sub || '', time: event.time || null
+    });
+  } catch(e) { console.warn('Supabase calendar sync failed', e); }
+}
+
+// Load all data from Supabase on startup
+async function loadFromSupabase() {
+  try {
+    const [statesRes, customRes, remindersRes] = await Promise.all([
+      db.from('contact_states').select('*'),
+      db.from('custom_contacts').select('*'),
+      db.from('calendar_reminders').select('*').order('created_at')
+    ]);
+
+    if(statesRes.data?.length) {
+      statesRes.data.forEach(row => {
+        stepMap[row.contact_id]    = row.step;
+        if(row.notes)   notesMap[row.contact_id]   = row.notes;
+        if(row.starred) starredMap[row.contact_id] = true;
+        if(row.moved_at) movedMap[row.contact_id]  = row.moved_at;
+      });
+    }
+
+    if(customRes.data?.length) {
+      customContacts = customRes.data.map(r => ({
+        id: r.id, tier: r.tier, name: r.name,
+        initials: r.initials || initialsFor(r.name),
+        av: r.avatar_bg || '#ede9ff', avc: r.avatar_fg || '#6050c0',
+        role: r.role, tags: r.tags || [],
+        contact: r.contact_method, why: r.why,
+        note: r.note, message: r.message
+      }));
+    }
+
+    if(remindersRes.data?.length) {
+      remindersRes.data.forEach(r => {
+        CALENDAR_EVENTS[0].events.push({
+          type: r.type, title: r.title,
+          sub: r.sub || '', time: r.time
+        });
+      });
+    }
+
+    saveLocalState(); // cache to localStorage
+    return true;
+  } catch(e) {
+    console.warn('Supabase load failed, using localStorage cache:', e);
+    return false;
+  }
+}
+
+const st = loadLocalState(); // load localStorage immediately for fast start
 let stepMap      = st.steps;
 let notesMap     = st.notes;
 let apiKey       = st.apiKey;
 let customContacts = st.custom;
 let starredMap   = st.starred;
-let movedMap     = st.moved; // {id: timestamp} of last step change
+let movedMap     = st.moved;
 
 let currentView   = 'tracker';
 let currentFilter = 'all';
@@ -751,13 +856,13 @@ function renderCard(c) {
 function advance(id, dir) {
   stepMap[id] = Math.max(0, Math.min(5, (stepMap[id]||0) + dir));
   movedMap[id] = Date.now();
-  saveState(); render();
+  saveState(); syncContact(id); render();
   if(openPanelId===id) openPanel(id);
 }
 function toggleStar(id) {
   starredMap[id] = !starredMap[id];
   if(!starredMap[id]) delete starredMap[id];
-  saveState(); renderTracker();
+  saveState(); syncContact(id); renderTracker();
 }
 function setFilter(f) { currentFilter=f; renderTracker(); }
 function onSearch(q) { searchQuery=q.trim(); renderTracker(); }
@@ -820,7 +925,7 @@ function cp(id,type) {
   const c = allContacts().find(x=>x.id===id);
   navigator.clipboard.writeText(type==='note'?c.note:c.message).catch(()=>{});
 }
-function saveNote(id,val) { notesMap[id]=val; saveState(); }
+function saveNote(id,val) { notesMap[id]=val; saveState(); syncContact(id); }
 function closePanel() {
   document.getElementById('detail-panel').classList.remove('open');
   openPanelId=null;
@@ -829,7 +934,7 @@ function deleteContact(id) {
   if(!confirm('Remove this contact? This cannot be undone.')) return;
   customContacts = customContacts.filter(c=>c.id!==id);
   delete stepMap[id]; delete notesMap[id]; delete starredMap[id]; delete movedMap[id];
-  saveState(); closePanel(); render();
+  saveState(); deleteFromSupabase(id); closePanel(); render();
 }
 
 /* ── Add Contact Modal ── */
@@ -920,7 +1025,7 @@ function saveNewContact() {
   stepMap[id] = 0;
 
   customContacts.push(contact);
-  saveState();
+  saveState(); syncCustomContact(contact); syncContact(id);
   closeAddModal();
   currentFilter = 'all';
   render();
@@ -1091,7 +1196,11 @@ function applyProposal(idx) {
   if(!p?.contactId) return;
   if(p.stepChanged && p.suggestedStep!==undefined) { stepMap[p.contactId]=p.suggestedStep; movedMap[p.contactId]=Date.now(); }
   if(p.noteToAdd) { const e=notesMap[p.contactId]||''; notesMap[p.contactId]=e+(e?'\n\n':'')+p.noteToAdd; }
-  if(p.calendarNote) CALENDAR_EVENTS[0].events.push({type:'reminder',title:`${p.contactName}: ${p.calendarNote}`,sub:'Added from conversation analyzer'});
+  if(p.calendarNote) {
+    const ev = {type:'reminder',title:`${p.contactName}: ${p.calendarNote}`,sub:'Added from conversation analyzer'};
+    CALENDAR_EVENTS[0].events.push(ev);
+    syncCalendarReminder(ev);
+  }
   saveState();
   document.getElementById(`proposal-${idx}`).outerHTML=`
     <div class="success-flash">✓ <strong>${p.contactName}</strong> updated${p.stepChanged?` — status → <em>${STEPS[p.suggestedStep]}</em>`:''}${p.noteToAdd?' · note added':''}${p.calendarNote?' · reminder added':''}</div>`;
@@ -1144,7 +1253,12 @@ function exportCSV() {
 // Show search + add button on tracker view by default
 document.getElementById('search-wrap').style.display='block';
 document.getElementById('add-contact-btn').style.display='inline-flex';
+
+// Start with localStorage data immediately, then refresh from Supabase
 render();
+loadFromSupabase().then(ok => {
+  if(ok) render(); // re-render with fresh Supabase data
+});
 </script>
 </body>
 </html>
