@@ -261,6 +261,65 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
 .field-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
 .empty-state{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;}
 
+/* ── Clock bar ── */
+.clock-bar {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.clock-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 20px;
+  flex: 1;
+  border-right: 1px solid var(--border);
+  gap: 1px;
+}
+.clock-zone:last-child { border-right: none; }
+.clock-zone.active-tz {
+  background: var(--lavender-lt);
+}
+.clock-zone-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 500;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.clock-zone.active-tz .clock-zone-label { color: var(--lavender); }
+.clock-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.clock-zone.active-tz .clock-time { color: var(--lavender); }
+.clock-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 0.03em;
+}
+.clock-city {
+  font-size: 10px;
+  color: var(--text2);
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+}
+@media(max-width:768px){
+  .clock-zone { padding: 5px 8px; }
+  .clock-time { font-size: 12px; }
+  .clock-date { display: none; }
+}
+
 /* ── Analyze proposals ── */
 .proposal-card{border-radius:var(--radius-lg);border:1.5px solid var(--lavender-md);background:var(--lavender-lt);padding:18px 20px;margin-bottom:10px;}
 .proposal-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -336,6 +395,8 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
 
   <!-- Main -->
   <div class="main">
+    <!-- Live clock bar -->
+    <div class="clock-bar" id="clock-bar"></div>
     <div class="topbar">
       <div class="topbar-left">
         <div class="page-title" id="page-title">Tracker</div>
@@ -1084,8 +1145,8 @@ function renderCalendar() {
       </div>`).join('')}
     </div>
     <div style="margin-top:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);font-size:12px;color:var(--text2);line-height:1.7;box-shadow:var(--shadow);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Call prep · Michael Cox</div>
-      Open with "I know you're busy so I'll be mindful of the 20 minutes." Ask about his path from Continental Airlines to restructuring advisory, what matters most for MSF students targeting restructuring, and end with "Is there anyone else you'd recommend I speak with?" No em dashes. Keep it conversational.
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Universal call prep rules</div>
+      Open with "I know you're busy so I'll be mindful of the 20 minutes." End every call with "Is there anyone else you'd recommend I speak with?" No em dashes. Take notes immediately after. Update the tracker the same day.
     </div>`;
 }
 
@@ -1283,6 +1344,43 @@ function exportCSV() {
   a.download='msf_networking.csv';
   a.click();
 }
+
+/* ── Live clocks ── */
+const ZONES = [
+  { label:'GST', city:'Dubai 🇦🇪',    tz:'Asia/Dubai',          active: true  },
+  { label:'CDT', city:'Austin 🤠',     tz:'America/Chicago',     active: false },
+  { label:'EDT', city:'New York 🗽',   tz:'America/New_York',    active: false },
+  { label:'UTC', city:'London 🇬🇧',   tz:'Europe/London',       active: false },
+];
+
+function formatClock(tz) {
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', {
+    timeZone: tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: true
+  });
+  const date = now.toLocaleDateString('en-US', {
+    timeZone: tz, weekday:'short', month:'short', day:'numeric'
+  });
+  return { time, date };
+}
+
+function tickClocks() {
+  const bar = document.getElementById('clock-bar');
+  if(!bar) return;
+  bar.innerHTML = ZONES.map(z => {
+    const { time, date } = formatClock(z.tz);
+    return `
+      <div class="clock-zone ${z.active ? 'active-tz' : ''}">
+        <div class="clock-zone-label">${z.label}</div>
+        <div class="clock-time">${time}</div>
+        <div class="clock-date">${date}</div>
+        <div class="clock-city">${z.city}</div>
+      </div>`;
+  }).join('');
+}
+
+tickClocks();
+setInterval(tickClocks, 1000);
 
 // Show search + add button on tracker view by default
 document.getElementById('search-wrap').style.display='block';
