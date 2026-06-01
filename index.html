@@ -3,468 +3,940 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0a0f">
+<meta name="theme-color" content="#f7f4ef">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="NetCRM">
 <title>NetCRM — MSF Networking</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0f;
-  --surface: #111118;
-  --surface2: #1a1a24;
-  --surface3: #22222f;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0f0f5;
-  --text2: #8888a0;
-  --text3: #555568;
-  --accent: #6c63ff;
-  --accent2: #8b83ff;
-  --green: #22c55e;
-  --green-bg: rgba(34,197,94,0.1);
-  --amber: #f59e0b;
-  --amber-bg: rgba(245,158,11,0.1);
-  --coral: #f97316;
-  --coral-bg: rgba(249,115,22,0.1);
-  --blue: #3b82f6;
-  --blue-bg: rgba(59,130,246,0.1);
-  --pink: #ec4899;
-  --pink-bg: rgba(236,72,153,0.1);
+  --bg:       #f7f4ef;
+  --surface:  #ffffff;
+  --surface2: #f2ede6;
+  --surface3: #ebe4da;
+  --border:   rgba(160,140,115,0.18);
+  --border2:  rgba(160,140,115,0.28);
+  --text:     #2a2218;
+  --text2:    #7a6e60;
+  --text3:    #b8ad9f;
+
+  --lavender:    #8b7cf8; --lavender-lt: #ede9ff; --lavender-md: #d4ceff;
+  --sage:        #5dab82; --sage-lt:     #e4f5ec; --sage-md:     #b8e4cb;
+  --amber:       #d4854a; --amber-lt:    #fdf0e6; --amber-md:    #f5c99a;
+  --rose:        #d46e8a; --rose-lt:     #fde8ef; --rose-md:     #f0b8ca;
+  --sky:         #5b92d4; --sky-lt:      #e5f0fb; --sky-md:      #b4d4f5;
+  --coral:       #d47060; --coral-lt:    #fde8e4; --coral-md:    #f5bdb5;
+  --mauve:       #9b7fc4; --mauve-lt:    #f0eaf8; --mauve-md:    #d9c8f0;
+  --gold:        #c4923a; --gold-lt:     #fdf4e0; --gold-md:     #f5d890;
+  --red:         #d45050; --red-lt:      #fde8e8; --red-md:      #f5b8b8;
+
+  --radius: 10px; --radius-lg: 16px;
+  --shadow:    0 1px 4px rgba(100,80,50,0.07), 0 4px 16px rgba(100,80,50,0.05);
+  --shadow-md: 0 2px 8px rgba(100,80,50,0.09), 0 8px 28px rgba(100,80,50,0.08);
+  --shadow-xl: 0 8px 32px rgba(100,80,50,0.14), 0 24px 64px rgba(100,80,50,0.1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; }
 
-.app { display: flex; height: 100vh; overflow: hidden; }
+/* ── Layout ── */
+.app { display:flex; height:100vh; overflow:hidden; }
 
-/* Sidebar */
-.sidebar { width: 220px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; }
-@media (max-width: 768px) { .sidebar { width: 60px; } .logo-sub, .nav-label, .sidebar-stat-label { display: none; } .logo-title { font-size: 14px; } .nav-item { justify-content: center; padding: 12px; } }
-.logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); }
-.logo-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); }
-.logo-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'DM Mono', monospace; }
-.nav { padding: 16px 0; flex: 1; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; cursor: pointer; font-size: 13px; color: var(--text2); transition: all 0.15s; border-left: 2px solid transparent; }
-.nav-item:hover { color: var(--text); background: var(--surface2); }
-.nav-item.active { color: var(--accent2); background: rgba(108,99,255,0.08); border-left-color: var(--accent); }
-.nav-icon { font-size: 16px; width: 18px; text-align: center; flex-shrink: 0; }
-.sidebar-stats { padding: 16px 20px; border-top: 1px solid var(--border); }
-.sidebar-stat { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
-.sidebar-stat-label { font-size: 11px; color: var(--text3); }
-.sidebar-stat-val { font-size: 12px; font-weight: 600; font-family: 'DM Mono', monospace; }
-.sidebar-stat-val.green { color: var(--green); }
-.sidebar-stat-val.accent { color: var(--accent2); }
-.sidebar-stat-val.amber { color: var(--amber); }
+/* ── Sidebar ── */
+.sidebar { width:232px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+@media(max-width:768px){
+  .sidebar{width:58px;}
+  .logo-sub,.nav-label,.sidebar-stat-label,.sidebar-section-label,.logo-wordmark{display:none;}
+  .logo-icon-only{display:flex!important;}
+  .nav-item{justify-content:center;padding:12px 0;}
+}
+.logo { padding:22px 22px 18px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.logo-wordmark { display:flex; align-items:baseline; gap:8px; }
+.logo-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; letter-spacing:-0.01em; }
+.logo-badge { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--lavender); background:var(--lavender-lt); border:1px solid var(--lavender-md); padding:2px 7px; border-radius:20px; letter-spacing:.06em; }
+.logo-sub { font-size:11px; color:var(--text3); margin-top:5px; font-family:'JetBrains Mono',monospace; letter-spacing:.03em; }
+.logo-icon-only { display:none; align-items:center; justify-content:center; }
+.nav { padding:14px 0; flex:1; }
+.nav-section-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text3); letter-spacing:.1em; text-transform:uppercase; padding:0 22px; margin:10px 0 5px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:10px 22px; cursor:pointer; font-size:13.5px; font-weight:500; color:var(--text2); transition:all .13s; border-left:2.5px solid transparent; }
+.nav-item:hover { color:var(--text); background:var(--surface2); }
+.nav-item.active { color:var(--lavender); background:var(--lavender-lt); border-left-color:var(--lavender); }
+.nav-icon { width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; opacity:.65; }
+.nav-item.active .nav-icon { opacity:1; }
+.sidebar-bottom { border-top:1px solid var(--border); padding:16px 22px 20px; flex-shrink:0; }
+.sidebar-section-label2 { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px; }
+.sidebar-stat { display:flex; justify-content:space-between; align-items:center; padding:3.5px 0; }
+.sidebar-stat-label { font-size:12px; color:var(--text2); }
+.sidebar-stat-val { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; }
+.sidebar-stat-val.sage{color:var(--sage);} .sidebar-stat-val.accent{color:var(--lavender);} .sidebar-stat-val.amber{color:var(--amber);}
+.sidebar-progress { margin-top:13px; padding-top:12px; border-top:1px solid var(--border); }
+.progress-label { display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text3); margin-bottom:5px; }
+.progress-track { height:4px; background:var(--surface2); border-radius:4px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--lavender),var(--rose)); border-radius:4px; transition:width .4s ease; }
 
-/* Main */
-.main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-.topbar { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); flex-shrink: 0; }
-.page-title { font-family: 'DM Serif Display', serif; font-size: 22px; }
-.btn { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
-.btn-primary { background: var(--accent); color: white; }
-.btn-primary:hover { background: var(--accent2); }
-.btn-ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
-.btn-ghost:hover { color: var(--text); background: var(--surface3); }
-.content { flex: 1; overflow-y: auto; padding: 24px; }
-@media (max-width: 768px) { .content { padding: 16px; } .topbar { padding: 12px 16px; } }
+/* ── Main ── */
+.main { flex:1; overflow:hidden; display:flex; flex-direction:column; }
+.topbar { height:58px; padding:0 22px; border-bottom:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; gap:10px; }
+.topbar-left { display:flex; align-items:center; gap:12px; }
+.page-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; letter-spacing:-0.01em; white-space:nowrap; }
+.topbar-divider { width:1px; height:16px; background:var(--border2); flex-shrink:0; }
+.topbar-sub { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:.04em; white-space:nowrap; }
+.topbar-right { display:flex; gap:8px; align-items:center; flex-shrink:0; }
 
-/* Stats */
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-@media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.stat-val { font-size: 28px; font-weight: 700; font-family: 'DM Mono', monospace; }
-.stat-label { font-size: 11px; color: var(--text2); margin-top: 4px; }
-.stat-val.green { color: var(--green); }
-.stat-val.accent { color: var(--accent2); }
-.stat-val.amber { color: var(--amber); }
-.stat-val.coral { color: var(--coral); }
+/* Search */
+.search-wrap { position:relative; }
+.search-input { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:7px 12px 7px 32px; font-size:12.5px; font-family:'Jost',sans-serif; color:var(--text); outline:none; width:200px; transition:all .15s; }
+.search-input:focus { border-color:var(--lavender-md); background:#fff; width:240px; }
+.search-input::placeholder { color:var(--text3); }
+.search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--text3); pointer-events:none; }
 
-/* Filters */
-.filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.filter-chip { padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--border2); color: var(--text2); background: transparent; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
-.filter-chip:hover { color: var(--text); }
-.filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 15px; border-radius:var(--radius); font-size:12.5px; font-weight:500; cursor:pointer; border:none; font-family:'Jost',sans-serif; transition:all .13s; white-space:nowrap; }
+.btn-primary { background:var(--lavender); color:white; }
+.btn-primary:hover { background:#7a6ae0; }
+.btn-ghost { background:var(--surface2); color:var(--text2); border:1px solid var(--border2); }
+.btn-ghost:hover { color:var(--text); background:var(--surface3); }
+.btn-sm { padding:5px 11px; font-size:11.5px; }
 
-/* Contact cards */
-.contact-grid { display: flex; flex-direction: column; gap: 10px; }
-.contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden; }
-.contact-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-.contact-card.tier1::before { background: var(--blue); }
-.contact-card.tier2::before { background: var(--green); }
-.contact-card.tier3::before { background: var(--text3); }
-.contact-card.peer::before { background: var(--amber); }
-.contact-card.ambassador::before { background: var(--pink); }
-.contact-card.ambassador-ib::before { background: var(--coral); }
-.contact-card.family::before { background: var(--accent); }
-.contact-card:hover { border-color: var(--border2); background: var(--surface2); }
-.card-header { display: flex; align-items: flex-start; gap: 12px; }
-.avatar { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
-.card-info { flex: 1; min-width: 0; }
-.card-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.card-name { font-size: 14px; font-weight: 600; }
-.card-role { font-size: 11px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.card-why { font-size: 11px; color: var(--text3); margin-top: 4px; }
-.tag { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
-.tag-blue { background: var(--blue-bg); color: #93c5fd; }
-.tag-green { background: var(--green-bg); color: #86efac; }
-.tag-amber { background: var(--amber-bg); color: #fcd34d; }
-.tag-coral { background: var(--coral-bg); color: #fdba74; }
-.tag-pink { background: var(--pink-bg); color: #f9a8d4; }
-.tag-accent { background: rgba(108,99,255,0.15); color: var(--accent2); }
+.content { flex:1; overflow-y:auto; padding:20px 24px; }
+@media(max-width:768px){.content{padding:14px;}.topbar{padding:0 14px;}}
+::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px;}
+
+/* ── Action panel ── */
+.action-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px 20px; margin-bottom:18px; box-shadow:var(--shadow); }
+.action-panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.action-panel-title { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; }
+.action-items { display:flex; flex-direction:column; gap:7px; }
+.action-item { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:var(--radius); background:var(--surface2); font-size:12.5px; cursor:pointer; transition:all .13s; border:1px solid transparent; }
+.action-item:hover { border-color:var(--border2); background:var(--surface3); }
+.action-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.action-dot.urgent { background:var(--red); }
+.action-dot.warn   { background:var(--amber); }
+.action-dot.ready  { background:var(--sage); }
+.action-dot.info   { background:var(--sky); }
+.action-name { font-weight:600; }
+.action-desc { color:var(--text2); margin-left:auto; font-size:11.5px; }
+.action-tag { font-family:'JetBrains Mono',monospace; font-size:8.5px; padding:1px 7px; border-radius:20px; text-transform:uppercase; letter-spacing:.04em; }
+.action-empty { font-size:12px; color:var(--text3); text-align:center; padding:8px 0; }
+
+/* ── Stats row ── */
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:18px; }
+@media(max-width:768px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 18px; box-shadow:var(--shadow); }
+.stat-val { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:500; line-height:1; letter-spacing:-0.02em; }
+.stat-label { font-size:11px; color:var(--text3); margin-top:4px; }
+.stat-val.sage{color:var(--sage);} .stat-val.accent{color:var(--lavender);} .stat-val.amber{color:var(--amber);}
+
+/* ── Filters ── */
+.filter-bar { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+.filter-label { font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text3); letter-spacing:.08em; text-transform:uppercase; margin-right:2px; }
+.filter-chip { padding:5px 12px; border-radius:20px; font-size:11.5px; font-weight:500; cursor:pointer; border:1px solid var(--border2); color:var(--text2); background:var(--surface); transition:all .13s; font-family:'Jost',sans-serif; }
+.filter-chip:hover { color:var(--text); background:var(--surface2); }
+.filter-chip.active { background:var(--lavender); color:white; border-color:var(--lavender); }
+.filter-chip.star-chip { color:var(--gold); border-color:var(--gold-md); background:var(--gold-lt); }
+.filter-chip.star-chip.active { background:var(--gold); color:white; border-color:var(--gold); }
+
+/* ── Contact cards ── */
+.contact-list { display:flex; flex-direction:column; gap:8px; }
+.contact-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); cursor:pointer; transition:all .14s; overflow:hidden; position:relative; box-shadow:var(--shadow); }
+.contact-card:hover { border-color:var(--border2); transform:translateY(-1px); box-shadow:var(--shadow-md); }
+.contact-card.selected { border-color:var(--lavender-md); box-shadow:0 0 0 3px var(--lavender-lt),var(--shadow-md); }
+.contact-card.starred { border-color:var(--gold-md); }
+.contact-card::before { content:''; position:absolute; left:0;top:0;bottom:0; width:3.5px; border-radius:0 2px 2px 0; }
+.contact-card.tier1::before{background:var(--sky);}
+.contact-card.tier2::before{background:var(--sage);}
+.contact-card.tier3::before{background:var(--text3);}
+.contact-card.peer::before{background:var(--amber);}
+.contact-card.ambassador::before{background:var(--rose);}
+.contact-card.ambassador-ib::before{background:var(--coral);}
+.contact-card.family::before{background:var(--mauve);}
+.contact-card.custom::before{background:var(--gold);}
+.card-inner { padding:13px 15px 11px 20px; }
+.card-top { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.avatar { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; flex-shrink:0; }
+.card-meta { flex:1; min-width:0; }
+.card-name-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:2px; }
+.card-name { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; letter-spacing:-0.01em; }
+.card-role { font-size:11.5px; color:var(--text2); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.card-why { font-size:11px; color:var(--text3); margin-top:3px; line-height:1.45; }
+.card-note-preview { font-size:10.5px; color:var(--text3); margin-top:4px; font-style:italic; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.card-actions { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.star-btn { background:none; border:none; cursor:pointer; font-size:15px; line-height:1; padding:2px; opacity:.35; transition:all .13s; color:var(--gold); }
+.star-btn:hover { opacity:.8; transform:scale(1.1); }
+.star-btn.starred { opacity:1; }
+.overdue-badge { font-family:'JetBrains Mono',monospace; font-size:8px; padding:2px 7px; border-radius:20px; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; }
+.overdue-badge.warn { background:var(--amber-lt); color:var(--amber); border:1px solid var(--amber-md); }
+.overdue-badge.urgent { background:var(--red-lt); color:var(--red); border:1px solid var(--red-md); }
+
+/* Tags */
+.tag { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:500; padding:2px 8px; border-radius:20px; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; border:1px solid transparent; }
+.tag-sky{background:var(--sky-lt);color:var(--sky);border-color:var(--sky-md);}
+.tag-sage{background:var(--sage-lt);color:var(--sage);border-color:var(--sage-md);}
+.tag-amber{background:var(--amber-lt);color:var(--amber);border-color:var(--amber-md);}
+.tag-coral{background:var(--coral-lt);color:var(--coral);border-color:var(--coral-md);}
+.tag-rose{background:var(--rose-lt);color:var(--rose);border-color:var(--rose-md);}
+.tag-mauve{background:var(--mauve-lt);color:var(--mauve);border-color:var(--mauve-md);}
+.tag-lavender{background:var(--lavender-lt);color:var(--lavender);border-color:var(--lavender-md);}
+.tag-gold{background:var(--gold-lt);color:var(--gold);border-color:var(--gold-md);}
+
+/* Step status pills */
+.step-none{display:none;}
+.step-invited{background:var(--sky-lt);color:var(--sky);border:1px solid var(--sky-md);}
+.step-accepted{background:var(--lavender-lt);color:var(--lavender);border:1px solid var(--lavender-md);}
+.step-responded{background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber-md);}
+.step-call{background:var(--coral-lt);color:var(--coral);border:1px solid var(--coral-md);}
+.step-done{background:var(--sage-lt);color:var(--sage);border:1px solid var(--sage-md);}
+.step-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 9px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;border:1px solid transparent;}
 
 /* Pipeline */
-.pipeline { display: flex; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-.pip-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
-.pip-dot { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border2); background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 9px; cursor: pointer; transition: all 0.15s; user-select: none; }
-.pip-dot:hover { border-color: var(--accent2); }
-.pip-dot.done { background: var(--green); border-color: var(--green); color: white; }
-.pip-dot.current { background: var(--accent); border-color: var(--accent); color: white; }
-.pip-line { flex: 1; height: 1px; background: var(--border); margin-bottom: 16px; transition: background 0.2s; }
-.pip-line.done { background: var(--green); }
-.pip-line.current { background: var(--accent); }
-.pip-label { font-size: 9px; color: var(--text3); margin-top: 3px; text-align: center; line-height: 1.3; max-width: 52px; }
-.pip-label.done { color: var(--green); }
-.pip-label.current { color: var(--accent2); }
+.pipeline { padding:0; }
+.pip-track { display:flex; align-items:center; flex:1; padding-bottom:18px; position:relative; }
+.pip-step { display:flex; flex-direction:column; align-items:center; position:relative; z-index:1; }
+.pip-dot { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--border2); background:var(--surface2); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .15s; }
+.pip-dot:hover { border-color:var(--lavender); background:var(--lavender-lt); transform:scale(1.12); }
+.pip-dot.done { background:var(--sage-lt); border-color:var(--sage); }
+.pip-dot.done::after { content:''; width:8px; height:8px; border-radius:50%; background:var(--sage); }
+.pip-dot.current { background:var(--lavender-lt); border-color:var(--lavender); box-shadow:0 0 0 4px var(--lavender-lt); }
+.pip-dot.current::after { content:''; width:8px; height:8px; border-radius:50%; background:var(--lavender); }
+.pip-connector { flex:1; height:1.5px; margin-bottom:18px; background:var(--border); transition:background .2s; }
+.pip-connector.done{background:var(--sage-md);}
+.pip-connector.active{background:var(--lavender-md);}
+.pip-label { position:absolute; top:26px; font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--text3); white-space:nowrap; text-align:center; transform:translateX(-50%); left:50%; pointer-events:none; }
+.pip-label.done{color:var(--sage);opacity:.8;}
+.pip-label.current{color:var(--lavender);}
 
-/* Detail panel */
-.detail-panel { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; background: var(--surface); border-left: 1px solid var(--border); z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.25s ease; box-shadow: -20px 0 60px rgba(0,0,0,0.5); }
-@media (max-width: 768px) { .detail-panel { width: 100%; } }
-.detail-panel.open { transform: translateX(0); }
-.panel-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; flex-shrink: 0; }
-.panel-close { width: 28px; height: 28px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text2); margin-left: auto; flex-shrink: 0; }
-.panel-body { flex: 1; overflow-y: auto; padding: 20px; }
-.panel-section { margin-bottom: 20px; }
-.panel-section-title { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
-.msg-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.7; color: var(--text2); white-space: pre-wrap; word-break: break-word; }
-.copy-btn { font-size: 11px; color: var(--accent2); cursor: pointer; background: none; border: none; margin-top: 6px; font-family: 'DM Sans', sans-serif; padding: 0; }
-.copy-btn:hover { color: var(--accent); }
-.notes-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 12px; color: var(--text); font-family: 'DM Sans', sans-serif; resize: vertical; min-height: 80px; outline: none; line-height: 1.6; }
-.notes-input:focus { border-color: var(--accent); }
-.step-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-.step-btn { padding: 4px 10px; font-size: 11px; }
+/* ── Detail panel ── */
+.detail-panel { position:fixed; right:0;top:0;bottom:0; width:440px; background:var(--surface); border-left:1px solid var(--border); z-index:200; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .22s cubic-bezier(.4,0,.2,1); box-shadow:-16px 0 48px rgba(100,80,50,.1); }
+@media(max-width:768px){.detail-panel{width:100%;}}
+.detail-panel.open{transform:translateX(0);}
+.panel-header { padding:20px 22px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:12px; flex-shrink:0; background:var(--surface2); }
+.panel-name { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:600; letter-spacing:-0.01em; }
+.panel-role { font-size:12px; color:var(--text2); margin-top:3px; }
+.panel-close { width:28px;height:28px; border-radius:8px; background:var(--surface3); border:1px solid var(--border2); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text2); transition:all .12s; flex-shrink:0; margin-left:auto; }
+.panel-close:hover{background:var(--rose-lt);color:var(--rose);border-color:var(--rose-md);}
+.panel-body { flex:1; overflow-y:auto; padding:20px 22px; display:flex; flex-direction:column; gap:18px; }
+.panel-section-title { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.1em; margin-bottom:9px; }
+.msg-box { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; font-size:12px; line-height:1.75; color:var(--text2); white-space:pre-wrap; word-break:break-word; }
+.copy-btn { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--lavender); cursor:pointer; background:none; border:none; margin-top:7px; padding:0; transition:color .12s; }
+.copy-btn:hover{color:#7a6ae0;}
+.notes-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:10px 12px; font-size:12px; color:var(--text); font-family:'Jost',sans-serif; resize:vertical; min-height:90px; outline:none; line-height:1.65; transition:border-color .12s; }
+.notes-input:focus{border-color:var(--lavender-md);background:#fff;}
+.notes-input::placeholder{color:var(--text3);}
+.step-btns{display:flex;gap:5px;flex-wrap:wrap;}
+.step-btn{padding:5px 11px;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.01em;border-radius:20px!important;}
+.why-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:11px 13px;font-size:12px;line-height:1.65;color:var(--text2);}
+.delete-contact-btn{background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);font-family:'Jost',sans-serif;padding:0;transition:color .12s;margin-left:auto;}
+.delete-contact-btn:hover{color:var(--red);}
 
-/* Calendar */
-.calendar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 768px) { .calendar-grid { grid-template-columns: 1fr; } }
-.cal-day { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.cal-day-label { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 6px; }
-.cal-day-name { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-.cal-event { border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid; }
-.cal-event.call { background: var(--green-bg); border-left-color: var(--green); }
-.cal-event.followup { background: var(--amber-bg); border-left-color: var(--amber); }
-.cal-event.reminder { background: var(--coral-bg); border-left-color: var(--coral); }
-.cal-event-title { font-size: 12px; font-weight: 500; }
-.cal-event-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+/* ── Calendar ── */
+.calendar-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:768px){.calendar-grid{grid-template-columns:1fr;}}
+.cal-day{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow);}
+.cal-day-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.cal-day-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;margin-bottom:12px;}
+.cal-event{border-radius:8px;padding:9px 12px;margin-bottom:8px;border-left:3px solid;}
+.cal-event:last-child{margin-bottom:0;}
+.cal-event.call{background:var(--sage-lt);border-left-color:var(--sage);}
+.cal-event.followup{background:var(--amber-lt);border-left-color:var(--amber);}
+.cal-event.reminder{background:var(--rose-lt);border-left-color:var(--rose);}
+.cal-event-title{font-size:12px;font-weight:600;}
+.cal-event-sub{font-size:11px;color:var(--text2);margin-top:2px;}
 
-/* AI */
-.ai-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-.ai-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.ai-sub { font-size: 12px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
-.textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 12px; color: var(--text); font-family: 'DM Sans', sans-serif; resize: vertical; min-height: 120px; outline: none; line-height: 1.6; }
-.textarea:focus { border-color: var(--accent); }
-.ai-result { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.7; color: var(--text); margin-top: 12px; white-space: pre-wrap; word-break: break-word; }
-.dot-pulse { display: flex; gap: 4px; align-items: center; }
-.dot-pulse span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
-.dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
-.dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes pulse { 0%,80%,100% { opacity:0.3; transform:scale(0.8); } 40% { opacity:1; transform:scale(1); } }
+/* ── AI / Analyze ── */
+.ai-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:12px;box-shadow:var(--shadow);}
+.ai-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;margin-bottom:4px;}
+.ai-sub{font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.65;}
+.textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:11px 13px;font-size:12px;color:var(--text);font-family:'Jost',sans-serif;resize:vertical;min-height:120px;outline:none;line-height:1.65;transition:border-color .12s;}
+.textarea:focus{border-color:var(--lavender-md);background:#fff;}
+.ai-result{background:var(--lavender-lt);border:1px solid var(--lavender-md);border-radius:var(--radius);padding:14px;font-size:13px;line-height:1.75;color:var(--text);margin-top:12px;white-space:pre-wrap;word-break:break-word;}
+.dot-pulse{display:flex;gap:5px;align-items:center;padding:4px 0;}
+.dot-pulse span{width:6px;height:6px;border-radius:50%;background:var(--lavender);animation:pulse 1.2s ease-in-out infinite;}
+.dot-pulse span:nth-child(2){animation-delay:.2s;}.dot-pulse span:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.api-banner{background:var(--lavender-lt);border:1px solid var(--lavender-md);border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--lavender);line-height:1.65;}
+.api-input{width:100%;background:white;border:1px solid var(--border2);border-radius:var(--radius);padding:8px 12px;font-size:12px;color:var(--text);font-family:'JetBrains Mono',monospace;outline:none;margin-top:8px;transition:border-color .12s;}
+.api-input:focus{border-color:var(--lavender-md);}
+.field-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;}
 
-/* API key input */
-.api-banner { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.3); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; color: var(--accent2); line-height: 1.6; }
-.api-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text); font-family: 'DM Mono', monospace; outline: none; margin-top: 8px; }
-.api-input:focus { border-color: var(--accent); }
+/* ── Analyze proposals ── */
+.proposal-card{border-radius:var(--radius-lg);border:1.5px solid var(--lavender-md);background:var(--lavender-lt);padding:18px 20px;margin-bottom:10px;}
+.proposal-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.proposal-avatar{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;flex-shrink:0;}
+.proposal-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;}
+.proposal-role{font-size:11px;color:var(--text2);margin-top:1px;}
+.proposal-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,124,248,.15);font-size:12.5px;}
+.proposal-row:last-of-type{border-bottom:none;padding-bottom:0;}
+.proposal-key{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--lavender);letter-spacing:.07em;text-transform:uppercase;width:88px;flex-shrink:0;padding-top:2px;}
+.proposal-val{color:var(--text);line-height:1.55;flex:1;}
+.proposal-arrow{color:var(--lavender);margin:0 5px;}
+.proposal-actions{display:flex;gap:8px;margin-top:14px;}
+.btn-apply{background:var(--lavender);color:white;font-size:12.5px;padding:8px 18px;}
+.btn-apply:hover{background:#7a6ae0;}
+.btn-dismiss{background:transparent;color:var(--text2);border:1px solid var(--border2);font-size:12.5px;padding:8px 14px;}
+.btn-dismiss:hover{background:var(--surface2);}
+.success-flash{background:var(--sage-lt);border:1.5px solid var(--sage-md);border-radius:var(--radius-lg);padding:14px 18px;font-size:13px;color:var(--sage);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.no-match-card{border-radius:var(--radius-lg);border:1.5px solid var(--amber-md);background:var(--amber-lt);padding:16px 18px;margin-top:16px;font-size:12.5px;color:var(--amber);line-height:1.6;}
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(42,34,24,.35);backdrop-filter:blur(4px);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-xl);border:1px solid var(--border);transform:translateY(10px);transition:transform .2s;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:20px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;}
+.modal-close{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text2);transition:all .12s;}
+.modal-close:hover{background:var(--rose-lt);color:var(--rose);}
+.modal-body{overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:var(--surface2);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;}
+.form-input{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--text);font-family:'Jost',sans-serif;outline:none;transition:border-color .12s;width:100%;}
+.form-input:focus{border-color:var(--lavender-md);background:#fff;}
+.form-select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--text);font-family:'Jost',sans-serif;outline:none;cursor:pointer;width:100%;transition:border-color .12s;}
+.form-select:focus{border-color:var(--lavender-md);}
+.form-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;font-size:12px;color:var(--text);font-family:'Jost',sans-serif;outline:none;resize:vertical;min-height:70px;line-height:1.6;transition:border-color .12s;width:100%;}
+.form-textarea:focus{border-color:var(--lavender-md);background:#fff;}
+.ai-prefill-bar{background:var(--lavender-lt);border:1px solid var(--lavender-md);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+.ai-prefill-title{font-size:12px;color:var(--lavender);font-weight:500;}
+.tags-picker{display:flex;gap:6px;flex-wrap:wrap;}
+.tag-pick{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border2);color:var(--text2);background:var(--surface);transition:all .12s;font-family:'Jost',sans-serif;}
+.tag-pick:hover{border-color:var(--border2);background:var(--surface2);}
+.tag-pick.selected{background:var(--lavender);color:white;border-color:var(--lavender);}
 </style>
 </head>
 <body>
 <div class="app">
+
+  <!-- Sidebar -->
   <div class="sidebar">
     <div class="logo">
-      <div class="logo-title">NetCRM</div>
-      <div class="logo-sub">MSF // Jisha Goyal</div>
+      <div class="logo-wordmark">
+        <span class="logo-title">NetCRM</span>
+        <span class="logo-badge">MSF</span>
+      </div>
+      <div class="logo-sub">Jisha Goyal · McCombs</div>
+      <div class="logo-icon-only">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;">N</span>
+      </div>
     </div>
     <nav class="nav">
+      <div class="nav-section-label">Views</div>
       <div class="nav-item active" onclick="showView('tracker')" id="nav-tracker"><span class="nav-icon">◎</span><span class="nav-label">Tracker</span></div>
       <div class="nav-item" onclick="showView('calendar')" id="nav-calendar"><span class="nav-icon">◷</span><span class="nav-label">Calendar</span></div>
+      <div class="nav-item" onclick="showView('analyze')" id="nav-analyze"><span class="nav-icon">⟳</span><span class="nav-label">Auto-Update</span></div>
       <div class="nav-item" onclick="showView('ai')" id="nav-ai"><span class="nav-icon">✦</span><span class="nav-label">AI Reply</span></div>
     </nav>
-    <div class="sidebar-stats" id="sidebar-stats"></div>
+    <div class="sidebar-bottom" id="sidebar-stats-container"></div>
   </div>
 
+  <!-- Main -->
   <div class="main">
     <div class="topbar">
-      <div class="page-title" id="page-title">Tracker</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-ghost" onclick="exportCSV()">Export CSV</button>
+      <div class="topbar-left">
+        <div class="page-title" id="page-title">Tracker</div>
+        <div class="topbar-divider"></div>
+        <div class="topbar-sub" id="topbar-sub">22 contacts</div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrap" id="search-wrap" style="display:none;">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" id="search-input" type="text" placeholder="Search contacts…" oninput="onSearch(this.value)">
+        </div>
+        <button class="btn btn-primary" id="add-contact-btn" onclick="openAddModal()" style="display:none;">+ Add contact</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">↓ CSV</button>
       </div>
     </div>
     <div class="content" id="content"></div>
   </div>
 
+  <!-- Detail panel -->
   <div class="detail-panel" id="detail-panel">
     <div class="panel-header">
       <div style="flex:1;min-width:0;">
-        <div class="card-name" id="panel-name"></div>
-        <div class="card-role" id="panel-role" style="margin-top:2px;font-size:12px;color:var(--text2);"></div>
+        <div class="panel-name" id="panel-name"></div>
+        <div class="panel-role" id="panel-role"></div>
       </div>
       <div class="panel-close" onclick="closePanel()">✕</div>
     </div>
     <div class="panel-body" id="panel-body"></div>
+  </div>
+
+  <!-- Add Contact Modal -->
+  <div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeAddModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Add new contact</div>
+        <div class="modal-close" onclick="closeAddModal()">✕</div>
+      </div>
+      <div class="modal-body">
+        <!-- AI Prefill -->
+        <div class="ai-prefill-bar">
+          <div class="ai-prefill-title">✦ AI prefill — paste their LinkedIn bio or headline</div>
+          <textarea class="form-textarea" id="prefill-bio" placeholder="e.g. VP at Goldman Sachs, previously McCombs MSF 2022, energy IB, UT Austin alum…" style="min-height:55px;"></textarea>
+          <button class="btn btn-primary btn-sm" onclick="aiFillContact()" style="align-self:flex-start;">Auto-fill form ↓</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full name *</label>
+            <input class="form-input" id="f-name" type="text" placeholder="Sarah Chen">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact method</label>
+            <select class="form-select" id="f-contact">
+              <option>LinkedIn</option><option>Email</option><option>LinkedIn DM</option><option>Direct</option><option>Phone</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Role & Company *</label>
+          <input class="form-input" id="f-role" type="text" placeholder="VP, Goldman Sachs Investment Banking">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tier</label>
+            <select class="form-select" id="f-tier">
+              <option value="tier1">Tier 1 — Banking</option>
+              <option value="tier2">Tier 2 — Investing</option>
+              <option value="tier3">Tier 3 — Consulting</option>
+              <option value="ambassador" selected>Ambassador / Alumni</option>
+              <option value="ambassador-ib">Ambassador — IB</option>
+              <option value="peer">Peer / Classmate</option>
+              <option value="family">Family / Network</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tags</label>
+            <div class="tags-picker" id="tags-picker">
+              <span class="tag-pick" onclick="toggleTag(this,'banking')">Banking</span>
+              <span class="tag-pick" onclick="toggleTag(this,'investing')">Investing</span>
+              <span class="tag-pick" onclick="toggleTag(this,'consulting')">Consulting</span>
+              <span class="tag-pick" onclick="toggleTag(this,'peer')">Peer</span>
+              <span class="tag-pick" onclick="toggleTag(this,'ambassador')">Ambassador</span>
+              <span class="tag-pick" onclick="toggleTag(this,'family')">Family</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Why they matter</label>
+          <input class="form-input" id="f-why" type="text" placeholder="MSF alum at top bank, energy IB focus, Texas connection">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Connection note <span style="color:var(--text3);font-size:9px;font-family:'JetBrains Mono';">300 chars</span></label>
+          <textarea class="form-textarea" id="f-note" placeholder="Short personal note to send with connection request…" oninput="this.nextElementSibling.textContent=this.value.length+'/300'"></textarea>
+          <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono';">0/300</span>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Outreach message</label>
+          <textarea class="form-textarea" id="f-message" placeholder="Full message to send after connecting…" style="min-height:90px;"></textarea>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Your notes (optional)</label>
+          <textarea class="form-textarea" id="f-notes" placeholder="How you found them, mutual connections, reminders…"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeAddModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveNewContact()">Save contact</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
 const STEPS = ['Invite sent','Accepted','Msg sent','Responded','Call booked','Done'];
 
-const CONTACTS = [
-  { id:1, tier:'tier1', name:'Nabil Ahmed', initials:'NA', av:'#1e3a5f', role:'Associate, Goldman Sachs', tags:['banking'], contact:'LinkedIn', why:'Recent MSF alum at Goldman. Exact path you want.',
-    note:'Hi Nabil, I\'m an incoming MSF student at McCombs this summer. Your path from the program to Goldman is exactly what I\'m trying to understand. I\'m an international student targeting IB. Would love to connect!',
-    message:'Hi Nabil, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour path from the MSF program to Goldman is exactly what I am trying to understand better. I am an international student with a data background, actively positioning myself for investment banking before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
-  { id:2, tier:'tier1', name:'Marshall Adkins', initials:'MA', av:'#1e3a5f', role:'MD & Head of Energy IB, Raymond James', tags:['banking'], contact:'Email', why:'Pure IB, energy is massive in Texas.',
-    note:'', message:'Hi Marshall, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour path leading energy investment banking at Raymond James is exactly the kind of trajectory I am trying to understand. I am an international student with a data background, actively positioning myself for investment banking before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
-  { id:3, tier:'tier1', name:'Emilee Masters', initials:'EM', av:'#1e3a5f', role:'VP, Houlihan Lokey', tags:['banking'], contact:'LinkedIn', why:'Middle-market IB. Most MSF-accessible path.',
-    note:'', message:'Hi Emilee, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nHoulihan Lokey is a firm I am actively targeting, and your path through the MSF program into investment banking is incredibly relevant to my situation. I am an international student with a data background, positioning myself for IB before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
-  { id:4, tier:'tier1', name:'Jeff Stadler', initials:'JS', av:'#1e3a5f', role:'Managing Director, J.P. Morgan Chase', tags:['banking'], contact:'LinkedIn', why:'Bulge bracket MD. Highest-level banking contact.',
-    note:'', message:'Hi Jeff, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour career in investment banking at J.P. Morgan is exactly what I am trying to understand better. I am an international student with a data background, actively positioning myself for IB before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
-  { id:5, tier:'tier1', name:'Michael Cox', initials:'MC', av:'#1e3a5f', role:'Vice Chairman, Seabury Group LLC', tags:['banking'], contact:'LinkedIn', why:'Restructuring IB. Call confirmed today Wednesday 2pm+ Central.',
-    note:'', message:'Hi Michael, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nRestructuring is an area within investment banking I am actively exploring, and your experience leading the global practice at Seabury is exactly the perspective I need. I am an international student with a data background, positioning myself for IB before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
-  { id:6, tier:'tier1', name:'Dan English', initials:'DE', av:'#1e3a5f', role:'Executive Director, Tudor Pickering Holt', tags:['banking'], contact:'LinkedIn', why:'Energy IB boutique. Austin/Texas-connected.',
-    note:'', message:'Hi Dan, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nTudor Pickering Holt is a firm I am genuinely interested in, and your path in energy investment banking is exactly what I am trying to understand better. I am an international student with a data background, actively positioning myself for IB before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
-  { id:14, tier:'peer', name:'Nicolas Liva', initials:'NL', av:'#3d2a00', role:'MSF Candidate | Raymond James Equity Research Practicum', tags:['peer'], contact:'LinkedIn DM', why:'Fellow international MSF student. Call Thu/Fri this week.',
-    note:'', message:'Hi Nicolas, my name is Jisha and I\'ll be joining the MSF program at McCombs this summer as well. I came across your profile and wanted to reach out, as an international student also targeting finance roles, it seems like we\'re navigating a very similar path.\n\nI noticed you\'re doing an equity research practicum with Raymond James right now, that\'s exactly the kind of experience I\'m trying to build. I\'d love to hear how you positioned yourself for that and how you\'ve found the MSF recruiting landscape so far as an international student.\n\nWould you be open to a quick call? Would be great to connect before we\'re both in Austin!' },
-  { id:21, tier:'family', name:'Vaibhav Joshi', initials:'VJ', av:'#2a1a5f', role:'Senior Consultant, EY (SAP Supply Chain)', tags:['family'], contact:'Direct', why:'Family friend at EY. Potential EY advisory introductions.',
-    note:'', message:'Hi Vaibhav, hope you\'re doing well! I\'m not sure if you know but I\'m starting an MSF at UT Austin McCombs this summer, really excited about it. I\'m targeting investment banking roles and have been networking quite a bit already.\n\nGiven your experience at EY I wanted to reach out. Would you be up for a quick call sometime? Would love to hear your perspective on breaking into finance from a non-traditional background, and honestly any advice you have would mean a lot coming from you.' },
-  { id:18, tier:'ambassador-ib', name:'Nick Bryngelson', initials:'NB', av:'#3d1500', role:'Incoming IB Analyst, Raymond James Houston Energy', tags:['ambassador-ib'], contact:'LinkedIn', why:'Confirmed call next week. Incoming RJ IB Analyst. Exact role you want.',
-    note:'', message:'Hi Nick, thanks for connecting! I came across your profile through the MSF ambassador page and saw you just accepted an offer with Raymond James in the Houston Energy Group, congratulations, that\'s exactly the path I\'m targeting.\n\nI\'m joining the MSF program this summer as an international student with a data background and I\'m actively positioning myself for investment banking. I\'d love to hear how you navigated recruiting through the MSF program and what you\'d recommend I focus on before the program even starts.\n\nWould you be open to a quick 20-minute call?\n\nThank you!' },
-  { id:16, tier:'ambassador', name:'William Gage', initials:'WG', av:'#0a2e1a', role:'Equity Research Associate, Wolfe Research | MSF 2025', tags:['ambassador'], contact:'LinkedIn', why:'Responded in 1 min. Call confirmed next week. Message Monday to schedule.',
-    note:'', message:'That\'s great to hear! I am pretty flexible next week, would any day work better for you? Happy to work around your schedule. And congratulations on the Wolfe Research role!' },
-  { id:22, tier:'ambassador', name:'Dalton Kile', initials:'DK', av:'#2a1a4a', role:'Associate, Susser Bank | MSF 2025', tags:['ambassador'], contact:'LinkedIn', why:'Responded positively. Follow up Monday to schedule call.',
-    note:'', message:'Thank you so much Dalton, really appreciate it! Would sometime next week work for a quick call? Happy to work around your schedule.' },
-  { id:15, tier:'ambassador', name:'Jesse Davila', initials:'JD', av:'#3d1a2a', role:'M&A Analytics Analyst | MSF Class of 2024', tags:['ambassador'], contact:'LinkedIn', why:'Alumni in M&A analytics. Most IB-relevant ambassador after Nick.',
-    note:'Hi Jesse, I\'m joining the MSF at McCombs this summer targeting IB. You\'re now in M&A analytics, exactly the path I\'m working toward. As an international student I\'d love to learn how you navigated recruiting. Would love to connect!',
-    message:'Hi Jesse, I\'m joining the MSF program at McCombs this summer and came across your profile on the student ambassador page.\n\nYou\'re now working in M&A analytics, that\'s exactly the path I\'m targeting. I\'m an international student with a data background positioning myself for IB. I\'d love to hear how you navigated recruiting from the MSF program and what you\'d do differently.\n\nWould you be open to a quick 20-minute call?\n\nThank you!' },
-  { id:17, tier:'ambassador', name:'Samuel Ringel', initials:'SR', av:'#3d1a2a', role:'Incoming Advisory Associate, KPMG | MSF 2026', tags:['ambassador'], contact:'LinkedIn', why:'KPMG advisory. Good for consulting parallel path intel.',
-    note:'Hi Samuel, I\'m joining the MSF at McCombs this summer. I saw you came from a non-traditional background, similar to me. I\'d love to hear how you\'ve found the transition. Would love to connect!',
-    message:'Hi Samuel, I\'m joining the MSF program at McCombs this summer and came across your profile on the student ambassador page.\n\nI noticed you came from a non-traditional background, I\'m coming from computational data science and targeting investment banking. I\'d love to hear how you\'ve navigated the transition and what you\'d recommend I prepare before starting.\n\nWould you be open to a quick chat?\n\nThank you!' },
-  { id:19, tier:'ambassador', name:'Hollis Wood', initials:'HW', av:'#3d1a2a', role:'Incoming Office Leasing Analyst, Stream Realty | MSF 2026', tags:['ambassador'], contact:'LinkedIn', why:'Real estate path. Good for program culture intel.',
-    note:'Hi Hollis, I\'m joining the MSF at McCombs this summer and found your profile on the ambassador page. I\'d love to hear about your experience and any advice for incoming students. Would love to connect!',
-    message:'Hi Hollis, I\'m joining the MSF program at McCombs this summer and came across your profile on the student ambassador page.\n\nI\'d love to learn more about your experience, particularly around recruiting, clubs, and what you wish you\'d known before starting. I\'m coming from a data science background targeting investment banking.\n\nWould you be open to a quick chat?\n\nThank you!' },
-  { id:20, tier:'ambassador', name:'Anna-Laura Houston', initials:'AH', av:'#3d1a2a', role:'Incoming Investment Analyst, VCIMCO | MSF 2026', tags:['ambassador'], contact:'LinkedIn', why:'Investments at VCIMCO. Useful for buy-side intel.',
-    note:'Hi Anna-Laura, I\'m joining the MSF at McCombs this summer. I saw you came from a non-business background, I\'m in a similar position from data science. Would love to connect!',
-    message:'Hi Anna-Laura, I\'m joining the MSF program at McCombs this summer and came across your profile on the student ambassador page.\n\nI noticed you came from a non-business background, I\'m in a similar position from computational data science, targeting investment banking. I\'d love to hear how you\'ve found the program and what support exists for students making this kind of transition.\n\nWould you be open to a quick chat?\n\nThank you!' },
-  { id:7, tier:'tier2', name:'Ashley Baum', initials:'AB', av:'#0a2e1a', role:'MD, Special Opportunities, Teacher Retirement System TX', tags:['investing'], contact:'LinkedIn', why:'Institutional investing. Good parallel track.',
-    note:'Hi Ashley, I\'m an incoming MSF student at McCombs this summer targeting investment banking. Your work in special opportunities investing is an area I\'d love to understand better. Would be great to connect!',
-    message:'Hi Ashley, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour work in special opportunities investing is an area I am keen to understand better. I am an international student with a data background, primarily targeting investment banking but also building a broader picture of where MSF graduates have found success.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
-  { id:8, tier:'tier2', name:'Brittany Braden', initials:'BB', av:'#0a2e1a', role:'Senior Principal, PGIM Private Capital', tags:['investing'], contact:'LinkedIn', why:'Private credit. Fastest-growing area in finance.',
-    note:'Hi Brittany, I\'m an incoming MSF student at McCombs this summer. Private credit is an area I\'m increasingly curious about and your path at PGIM is exactly the kind of trajectory I\'d love to understand. Would be great to connect!',
-    message:'Hi Brittany, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nPrivate credit is an area I am increasingly curious about, and your path at PGIM is exactly the kind of trajectory I want to understand better.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
-  { id:9, tier:'tier2', name:'Clas Olsson', initials:'CO', av:'#0a2e1a', role:'CIO International Equities, Invesco', tags:['investing'], contact:'LinkedIn', why:'Global equities. Relevant for international angle.',
-    note:'Hi Clas, I\'m an incoming MSF student at McCombs this summer. Your focus on international equities is particularly interesting to me as an international student. Would love to connect!',
-    message:'Hi Clas, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour focus on international equities is particularly interesting to me as an international student. I\'d love to understand how geography shapes finance careers.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
-  { id:10, tier:'tier2', name:'Rob Karicod', initials:'RK', av:'#0a2e1a', role:'CFO, Sixth Street Partners', tags:['investing'], contact:'Email', why:'Sixth Street. Top-tier alt investing firm.',
-    note:'Hi Rob, I\'m an incoming MSF student at McCombs this summer targeting IB. Your path into alternative investing at Sixth Street is exactly the kind of trajectory I\'d love to learn more about. Would be great to connect!',
-    message:'Hi Rob, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour path into alternative investing at Sixth Street is exactly what I am trying to understand better.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
-  { id:11, tier:'tier3', name:'Stephanie Cutter', initials:'SC', av:'#2a2a2a', role:'Principal, EY', tags:['consulting'], contact:'LinkedIn', why:'EY financial advisory. Strong fallback, IB-adjacent.',
-    note:'Hi Stephanie, I\'m an incoming MSF student at McCombs this summer primarily targeting IB but also exploring financial advisory. Your experience at EY is exactly the perspective I\'d love to hear. Would love to connect!',
-    message:'Hi Stephanie, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nI am primarily targeting investment banking but also exploring financial advisory as a parallel path. Your experience at EY is exactly the perspective I\'d love to hear.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
-  { id:12, tier:'tier3', name:'Jeff Kennedy', initials:'JK', av:'#2a2a2a', role:'Principal, Deloitte', tags:['consulting'], contact:'Email', why:'Deloitte. Strong parallel track.',
-    note:'Hi Jeff, I\'m an incoming MSF student at McCombs this summer targeting IB and exploring financial advisory as a parallel path. Your experience at Deloitte is exactly the kind of perspective I\'d love to learn from. Would love to connect!',
-    message:'Hi Jeff, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nI am primarily targeting investment banking but also exploring financial advisory as a parallel path. Your experience at Deloitte is exactly the kind of perspective I\'d love to learn from.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
-  { id:13, tier:'tier3', name:'Larry Manning', initials:'LM', av:'#2a2a2a', role:'Senior Managing Director, FTI Consulting', tags:['consulting'], contact:'LinkedIn', why:'FTI restructuring. Overlaps with IB restructuring.',
-    note:'Hi Larry, I\'m an incoming MSF student at McCombs this summer targeting IB, particularly restructuring. FTI sits right at that intersection and I\'d love to understand the path better. Would love to connect!',
-    message:'Hi Larry, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nFTI\'s work sits right at the intersection of finance and restructuring, which is an area I am actively targeting within investment banking.\n\nWould you be open to a 20-minute call?\n\nThank you!' }
+/* ── Built-in contacts ── */
+const BUILTIN_CONTACTS = [
+  { id:1,  tier:'tier1', name:'Nabil Ahmed',        initials:'NA', av:'#dce8f5', avc:'#4a7aaa', role:'Associate, Goldman Sachs',                               tags:['banking'],       contact:'LinkedIn',    why:'Recent MSF alum at Goldman. Exact path you want.', note:'Hi Nabil, I\'m an incoming MSF student at McCombs this summer. Your path from the program to Goldman is exactly what I\'m trying to understand. I\'m an international student targeting IB. Would love to connect!', message:'Hi Nabil, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour path from the MSF program to Goldman is exactly what I am trying to understand better. I am an international student with a data background, actively positioning myself for investment banking before the program even starts.\n\nWould you be open to a 20-minute call? I would love to learn what actually moved the needle for you.\n\nThank you!' },
+  { id:2,  tier:'tier1', name:'Marshall Adkins',    initials:'MA', av:'#dce8f5', avc:'#4a7aaa', role:'MD & Head of Energy IB, Raymond James',                  tags:['banking'],       contact:'Email',       why:'Pure IB, energy is massive in Texas.', note:'', message:'Hi Marshall, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour path leading energy investment banking at Raymond James is exactly the kind of trajectory I am trying to understand.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:3,  tier:'tier1', name:'Emilee Masters',     initials:'EM', av:'#dce8f5', avc:'#4a7aaa', role:'VP, Houlihan Lokey',                                      tags:['banking'],       contact:'LinkedIn',    why:'Middle-market IB. Most MSF-accessible path.', note:'', message:'Hi Emilee, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nHoulihan Lokey is a firm I am actively targeting, and your path through the MSF program into investment banking is incredibly relevant.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:4,  tier:'tier1', name:'Jeff Stadler',       initials:'JS', av:'#dce8f5', avc:'#4a7aaa', role:'Managing Director, J.P. Morgan Chase',                   tags:['banking'],       contact:'LinkedIn',    why:'Bulge bracket MD. Highest-level banking contact.', note:'', message:'Hi Jeff, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour career in investment banking at J.P. Morgan is exactly what I am trying to understand better.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:5,  tier:'tier1', name:'Michael Cox',        initials:'MC', av:'#dce8f5', avc:'#4a7aaa', role:'Vice Chairman, Seabury Group LLC',                       tags:['banking'],       contact:'LinkedIn',    why:'Restructuring IB. Call done.', note:'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.', message:'Hi Michael, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nRestructuring is an area within investment banking I am actively exploring.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:6,  tier:'tier1', name:'Dan English',        initials:'DE', av:'#dce8f5', avc:'#4a7aaa', role:'Executive Director, Tudor Pickering Holt',                tags:['banking'],       contact:'LinkedIn',    why:'Energy IB boutique. Austin/Texas-connected.', note:'', message:'Hi Dan, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nTudor Pickering Holt is a firm I am genuinely interested in.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:7,  tier:'tier2', name:'Ashley Baum',        initials:'AB', av:'#e0f2ea', avc:'#3a8a60', role:'MD, Special Opportunities, Teacher Retirement System TX', tags:['investing'],     contact:'LinkedIn',    why:'Institutional investing. Good parallel track.', note:'', message:'Hi Ashley, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour work in special opportunities investing is an area I am keen to understand better.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:8,  tier:'tier2', name:'Brittany Braden',    initials:'BB', av:'#e0f2ea', avc:'#3a8a60', role:'Senior Principal, PGIM Private Capital',                  tags:['investing'],     contact:'LinkedIn',    why:'Private credit. Fastest-growing area in finance.', note:'', message:'Hi Brittany, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nPrivate credit is an area I am increasingly curious about.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:9,  tier:'tier2', name:'Clas Olsson',        initials:'CO', av:'#e0f2ea', avc:'#3a8a60', role:'CIO International Equities, Invesco',                     tags:['investing'],     contact:'LinkedIn',    why:'Global equities. Relevant for international angle.', note:'', message:'Hi Clas, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour focus on international equities is particularly interesting to me as an international student.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:10, tier:'tier2', name:'Rob Karicod',        initials:'RK', av:'#e0f2ea', avc:'#3a8a60', role:'CFO, Sixth Street Partners',                              tags:['investing'],     contact:'Email',       why:'Sixth Street. Top-tier alt investing firm.', note:'', message:'Hi Rob, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nYour path into alternative investing at Sixth Street is exactly what I am trying to understand better.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:11, tier:'tier3', name:'Stephanie Cutter',   initials:'SC', av:'#ede9e3', avc:'#7a6e60', role:'Principal, EY',                                           tags:['consulting'],    contact:'LinkedIn',    why:'EY financial advisory. Strong fallback, IB-adjacent.', note:'', message:'Hi Stephanie, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nI am primarily targeting investment banking but also exploring financial advisory as a parallel path.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:12, tier:'tier3', name:'Jeff Kennedy',       initials:'JK', av:'#ede9e3', avc:'#7a6e60', role:'Principal, Deloitte',                                     tags:['consulting'],    contact:'Email',       why:'Deloitte. Strong parallel track.', note:'', message:'Hi Jeff, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nI am primarily targeting investment banking but also exploring financial advisory as a parallel path.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:13, tier:'tier3', name:'Larry Manning',      initials:'LM', av:'#ede9e3', avc:'#7a6e60', role:'Senior Managing Director, FTI Consulting',                tags:['consulting'],    contact:'LinkedIn',    why:'FTI restructuring. Overlaps with IB restructuring.', note:'', message:'Hi Larry, I am an incoming MSF student at McCombs and came across your profile on the advisory council page.\n\nFTI\'s work sits right at the intersection of finance and restructuring.\n\nWould you be open to a 20-minute call?\n\nThank you!' },
+  { id:14, tier:'peer',  name:'Nicolas Liva',       initials:'NL', av:'#fdf0e6', avc:'#c07030', role:'MSF Candidate | Raymond James Equity Research Practicum',  tags:['peer'],          contact:'LinkedIn DM', why:'Fellow international MSF student. Call Thu/Fri this week.', note:'Available Thu or Fri this week. Confirming time.', message:'Hi Nicolas, my name is Jisha and I\'ll be joining the MSF program at McCombs this summer as well.\n\nI noticed you\'re doing an equity research practicum with Raymond James, that\'s exactly the kind of experience I\'m trying to build. Would you be open to a quick call?' },
+  { id:15, tier:'ambassador', name:'Jesse Davila',  initials:'JD', av:'#fde8ef', avc:'#b05070', role:'M&A Analytics Analyst | MSF Class of 2024',               tags:['ambassador'],    contact:'LinkedIn',    why:'Alumni in M&A analytics. Most IB-relevant ambassador after Nick.', note:'', message:'Hi Jesse, I\'m joining the MSF program at McCombs this summer and came across your profile on the student ambassador page.\n\nYou\'re now working in M&A analytics, that\'s exactly the path I\'m targeting.\n\nWould you be open to a quick 20-minute call?\n\nThank you!' },
+  { id:16, tier:'ambassador', name:'William Gage',  initials:'WG', av:'#fde8ef', avc:'#b05070', role:'Equity Research Associate, Wolfe Research | MSF 2025',    tags:['ambassador'],    contact:'LinkedIn',    why:'Responded in 1 min. Call confirmed next week.', note:'Reach out Monday to schedule.', message:'That\'s great to hear! I am pretty flexible next week, would any day work better for you? Happy to work around your schedule.' },
+  { id:17, tier:'ambassador', name:'Samuel Ringel', initials:'SR', av:'#fde8ef', avc:'#b05070', role:'Incoming Advisory Associate, KPMG | MSF 2026',            tags:['ambassador'],    contact:'LinkedIn',    why:'KPMG advisory. Good for consulting parallel path intel.', note:'', message:'Hi Samuel, I\'m joining the MSF program at McCombs this summer.\n\nI noticed you came from a non-traditional background, I\'m coming from computational data science targeting investment banking.\n\nWould you be open to a quick chat?\n\nThank you!' },
+  { id:18, tier:'ambassador-ib', name:'Nick Bryngelson', initials:'NB', av:'#fde8e4', avc:'#b05040', role:'Incoming IB Analyst, Raymond James Houston Energy', tags:['ambassador-ib'], contact:'LinkedIn',    why:'Confirmed call next week. Incoming RJ IB Analyst. Exact role you want.', note:'Confirmed call next week. Follow up Monday to schedule.', message:'Hi Nick, I came across your profile through the MSF ambassador page and saw you just accepted an offer with Raymond James in the Houston Energy Group, congratulations.\n\nWould you be open to a quick 20-minute call?\n\nThank you!' },
+  { id:19, tier:'ambassador', name:'Hollis Wood',   initials:'HW', av:'#fde8ef', avc:'#b05070', role:'Incoming Office Leasing Analyst, Stream Realty | MSF 2026', tags:['ambassador'],  contact:'LinkedIn',    why:'Real estate path. Good for program culture intel.', note:'', message:'Hi Hollis, I\'m joining the MSF program at McCombs this summer.\n\nI\'d love to learn more about your experience, particularly around recruiting and what you wish you\'d known before starting.\n\nWould you be open to a quick chat?\n\nThank you!' },
+  { id:20, tier:'ambassador', name:'Anna-Laura Houston', initials:'AH', av:'#fde8ef', avc:'#b05070', role:'Incoming Investment Analyst, VCIMCO | MSF 2026',   tags:['ambassador'],    contact:'LinkedIn',    why:'Investments at VCIMCO. Useful for buy-side intel.', note:'', message:'Hi Anna-Laura, I\'m joining the MSF program at McCombs this summer.\n\nI noticed you came from a non-business background, similar to my computational data science background.\n\nWould you be open to a quick chat?\n\nThank you!' },
+  { id:21, tier:'family', name:'Vaibhav Joshi',     initials:'VJ', av:'#f0eaf8', avc:'#7050a0', role:'Senior Consultant, EY (SAP Supply Chain)',                tags:['family'],        contact:'Direct',      why:'Family friend at EY. Potential EY advisory introductions.', note:'', message:'Hi Vaibhav, hope you\'re doing well! I\'m starting an MSF at UT Austin McCombs this summer and targeting investment banking roles.\n\nWould you be up for a quick call? Would love to hear your perspective.' },
+  { id:22, tier:'ambassador', name:'Dalton Kile',   initials:'DK', av:'#fde8ef', avc:'#b05070', role:'Associate, Susser Bank | MSF 2025',                       tags:['ambassador'],    contact:'LinkedIn',    why:'Responded positively. Follow up Monday to schedule call.', note:'Responded positively. Follow up Monday to schedule.', message:'Thank you so much Dalton, really appreciate it! Would sometime next week work for a quick call? Happy to work around your schedule.' }
 ];
 
-const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:3,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:3,15:1,16:3,17:1,18:3,19:1,20:1,21:2,22:3};
-const DEFAULT_NOTES = {5:'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',14:'Available Thu or Fri this week. Confirming time. He is in Austin CST, I am in GST.',18:'Confirmed call next week. Follow up Monday to schedule.',16:'Reach out Monday to schedule. He said he will know his schedule then.',22:'Responded positively. Follow up Monday to schedule.'};
+const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:5,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:3,15:4,16:3,17:1,18:3,19:1,20:1,21:2,22:3};
+const DEFAULT_NOTES = {5:'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',14:'Available Thu or Fri this week. Confirming time.',18:'Confirmed call next week. Follow up Monday to schedule.',16:'Reach out Monday to schedule.',22:'Responded positively. Follow up Monday to schedule.'};
 
+/* ── State ── */
 function loadState() {
   try {
-    const s = localStorage.getItem('netcrm_steps');
-    const n = localStorage.getItem('netcrm_notes');
-    const k = localStorage.getItem('netcrm_apikey');
     return {
-      steps: s ? JSON.parse(s) : {...DEFAULT_STEPS},
-      notes: n ? JSON.parse(n) : {...DEFAULT_NOTES},
-      apiKey: k || ''
+      steps:   JSON.parse(localStorage.getItem('netcrm_steps'))   || {...DEFAULT_STEPS},
+      notes:   JSON.parse(localStorage.getItem('netcrm_notes'))   || {...DEFAULT_NOTES},
+      apiKey:  localStorage.getItem('netcrm_apikey') || '',
+      custom:  JSON.parse(localStorage.getItem('netcrm_custom'))  || [],
+      starred: JSON.parse(localStorage.getItem('netcrm_starred')) || {},
+      moved:   JSON.parse(localStorage.getItem('netcrm_moved'))   || {},
     };
-  } catch(e) { return { steps:{...DEFAULT_STEPS}, notes:{...DEFAULT_NOTES}, apiKey:'' }; }
+  } catch(e) { return {steps:{...DEFAULT_STEPS},notes:{...DEFAULT_NOTES},apiKey:'',custom:[],starred:{},moved:{}}; }
 }
-
 function saveState() {
   try {
-    localStorage.setItem('netcrm_steps', JSON.stringify(stepMap));
-    localStorage.setItem('netcrm_notes', JSON.stringify(notesMap));
+    localStorage.setItem('netcrm_steps',   JSON.stringify(stepMap));
+    localStorage.setItem('netcrm_notes',   JSON.stringify(notesMap));
+    localStorage.setItem('netcrm_custom',  JSON.stringify(customContacts));
+    localStorage.setItem('netcrm_starred', JSON.stringify(starredMap));
+    localStorage.setItem('netcrm_moved',   JSON.stringify(movedMap));
     if(apiKey) localStorage.setItem('netcrm_apikey', apiKey);
   } catch(e) {}
 }
 
-const state = loadState();
-let stepMap = state.steps;
-let notesMap = state.notes;
-let apiKey = state.apiKey;
-let currentView = 'tracker';
-let currentFilter = 'all';
-let openPanelId = null;
+const st = loadState();
+let stepMap      = st.steps;
+let notesMap     = st.notes;
+let apiKey       = st.apiKey;
+let customContacts = st.custom;
+let starredMap   = st.starred;
+let movedMap     = st.moved; // {id: timestamp} of last step change
 
-const CALENDAR = [
-  { day:'Today', date:'Wed May 27', events:[
-    {type:'call', title:'Call: Michael Cox', sub:'Seabury — after 2pm Central (10pm GST)', time:'10:00 PM GST'},
-    {type:'reminder', title:'Confirm time with Nicolas Liva', sub:'Thu or Fri — ask morning vs afternoon'}
-  ]},
-  { day:'Monday', date:'Jun 2', events:[
+let currentView   = 'tracker';
+let currentFilter = 'all';
+let searchQuery   = '';
+let openPanelId   = null;
+let pendingProposals = [];
+let newContactTags = [];
+
+function allContacts() {
+  return [...BUILTIN_CONTACTS, ...customContacts];
+}
+
+/* ── Avatar helper for custom contacts ── */
+const AVATAR_PALETTES = [
+  {bg:'#dce8f5',fg:'#4a7aaa'},{bg:'#e0f2ea',fg:'#3a8a60'},{bg:'#fde8ef',fg:'#b05070'},
+  {bg:'#fdf0e6',fg:'#c07030'},{bg:'#f0eaf8',fg:'#7050a0'},{bg:'#fde8e4',fg:'#b05040'},
+  {bg:'#e5f0fb',fg:'#3a72b4'},{bg:'#ede9ff',fg:'#6050c0'},
+];
+function avatarForName(name) {
+  let h = 0; for(let c of name) h = (h*31 + c.charCodeAt(0)) & 0xffff;
+  return AVATAR_PALETTES[h % AVATAR_PALETTES.length];
+}
+function initialsFor(name) {
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+}
+function nextCustomId() {
+  const ids = allContacts().map(c=>c.id);
+  return Math.max(0,...ids) + 1;
+}
+
+/* ── Overdue logic ── */
+function daysSinceMove(id) {
+  if(!movedMap[id]) return null;
+  return Math.floor((Date.now() - movedMap[id]) / 86400000);
+}
+function overdueLabel(id) {
+  const days = daysSinceMove(id);
+  const step = stepMap[id] || 0;
+  if(step === 0 || step === 5) return null; // not started or done
+  if(days === null) return null;
+  if(days >= 10) return {label: days+'d', cls:'urgent'};
+  if(days >= 5)  return {label: days+'d', cls:'warn'};
+  return null;
+}
+
+/* ── Calendar data (dynamic) ── */
+let CALENDAR_EVENTS = [
+  { day:'Today', date:'Mon Jun 2', events:[
     {type:'followup', title:'Message William Gage', sub:'Schedule call this week'},
     {type:'followup', title:'Message Nick Bryngelson', sub:'Schedule call this week'},
     {type:'followup', title:'Message Dalton Kile', sub:'Schedule call this week'},
     {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan'}
   ]},
-  { day:'Wed May 28 area', date:'Thu/Fri', events:[
+  { day:'This Week', date:'Jun 3–6', events:[
     {type:'call', title:'Call: Nicolas Liva', sub:'Fellow international MSF, RJ practicum', time:'TBD'}
   ]},
   { day:'Next Week', date:'Jun 9+', events:[
     {type:'call', title:'Call: William Gage', sub:'Equity Research, Wolfe Research', time:'TBD'},
     {type:'call', title:'Call: Nick Bryngelson', sub:'IB Analyst, Raymond James', time:'TBD'},
+    {type:'call', title:'Call: Jesse Davila', sub:'M&A Analytics Analyst', time:'TBD'},
     {type:'call', title:'Call: Dalton Kile', sub:'Susser Bank', time:'TBD'}
+  ]},
+  { day:'Ongoing', date:'Check weekly', events:[
+    {type:'reminder', title:'Follow up Tier 1s if no reply in 7d', sub:'Marshall, Emilee, Jeff, Dan, Nabil'},
   ]}
 ];
 
+/* ── Render engine ── */
 function render() {
   updateSidebar();
-  if(currentView==='tracker') renderTracker();
+  if(currentView==='tracker')  renderTracker();
   else if(currentView==='calendar') renderCalendar();
+  else if(currentView==='analyze')  renderAnalyze();
   else renderAI();
 }
 
 function updateSidebar() {
-  const inv = CONTACTS.filter(c=>stepMap[c.id]>=1).length;
-  const res = CONTACTS.filter(c=>stepMap[c.id]>=3).length;
-  const calls = CONTACTS.filter(c=>stepMap[c.id]>=4).length;
-  document.getElementById('sidebar-stats').innerHTML = `
-    <div class="sidebar-stat"><span class="sidebar-stat-label">Total</span><span class="sidebar-stat-val accent">${CONTACTS.length}</span></div>
-    <div class="sidebar-stat"><span class="sidebar-stat-label">In progress</span><span class="sidebar-stat-val">${inv}</span></div>
-    <div class="sidebar-stat"><span class="sidebar-stat-label">Responded</span><span class="sidebar-stat-val amber">${res}</span></div>
-    <div class="sidebar-stat"><span class="sidebar-stat-label">Calls set</span><span class="sidebar-stat-val green">${calls}</span></div>
-  `;
+  const contacts = allContacts();
+  const total = contacts.length;
+  const responded = contacts.filter(c=>stepMap[c.id]>=3).length;
+  const calls = contacts.filter(c=>stepMap[c.id]>=4).length;
+  const done = contacts.filter(c=>stepMap[c.id]>=5).length;
+  const pct = total ? Math.round((responded/total)*100) : 0;
+  document.getElementById('sidebar-stats-container').innerHTML = `
+    <div class="sidebar-section-label2">Pipeline</div>
+    <div class="sidebar-stat"><span class="sidebar-stat-label">Total</span><span class="sidebar-stat-val accent">${total}</span></div>
+    <div class="sidebar-stat"><span class="sidebar-stat-label">Responded</span><span class="sidebar-stat-val amber">${responded}</span></div>
+    <div class="sidebar-stat"><span class="sidebar-stat-label">Calls set</span><span class="sidebar-stat-val sage">${calls}</span></div>
+    <div class="sidebar-stat"><span class="sidebar-stat-label">Done</span><span class="sidebar-stat-val sage">${done}</span></div>
+    <div class="sidebar-progress">
+      <div class="progress-label"><span>Response rate</span><span>${pct}%</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
 }
 
 function showView(v) {
   currentView = v;
-  ['tracker','calendar','ai'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
+  ['tracker','calendar','analyze','ai'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
   document.getElementById('nav-'+v).classList.add('active');
-  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',ai:'AI Reply'}[v];
+  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply'}[v];
+  document.getElementById('search-wrap').style.display    = v==='tracker' ? 'block' : 'none';
+  document.getElementById('add-contact-btn').style.display = v==='tracker' ? 'inline-flex' : 'none';
   closePanel();
   render();
 }
 
+/* ── Tracker ── */
 function getFiltered() {
-  const f = currentFilter;
-  if(f==='tier1') return CONTACTS.filter(c=>c.tier==='tier1');
-  if(f==='tier2') return CONTACTS.filter(c=>c.tier==='tier2');
-  if(f==='tier3') return CONTACTS.filter(c=>c.tier==='tier3');
-  if(f==='peer') return CONTACTS.filter(c=>c.tier==='peer'||c.tier==='family');
-  if(f==='ambassador') return CONTACTS.filter(c=>c.tier.includes('ambassador'));
-  if(f==='responded') return CONTACTS.filter(c=>stepMap[c.id]>=3);
-  if(f==='calls') return CONTACTS.filter(c=>stepMap[c.id]>=4);
-  return CONTACTS;
+  let list = allContacts();
+  if(currentFilter==='tier1')    list = list.filter(c=>c.tier==='tier1');
+  else if(currentFilter==='tier2')    list = list.filter(c=>c.tier==='tier2');
+  else if(currentFilter==='tier3')    list = list.filter(c=>c.tier==='tier3');
+  else if(currentFilter==='peer')     list = list.filter(c=>c.tier==='peer'||c.tier==='family');
+  else if(currentFilter==='ambassador') list = list.filter(c=>c.tier.includes('ambassador'));
+  else if(currentFilter==='responded')  list = list.filter(c=>stepMap[c.id]>=3);
+  else if(currentFilter==='calls')      list = list.filter(c=>stepMap[c.id]>=4);
+  else if(currentFilter==='starred')    list = list.filter(c=>starredMap[c.id]);
+  else if(currentFilter==='overdue')    list = list.filter(c=>overdueLabel(c.id));
+  if(searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(c=>
+      c.name.toLowerCase().includes(q) ||
+      c.role.toLowerCase().includes(q) ||
+      (c.why||'').toLowerCase().includes(q)
+    );
+  }
+  // Starred float to top
+  list.sort((a,b)=>(starredMap[b.id]?1:0)-(starredMap[a.id]?1:0));
+  return list;
+}
+
+function buildActionItems() {
+  const contacts = allContacts();
+  const items = [];
+  // Overdue (stuck >7 days at mid-step)
+  contacts.forEach(c=>{
+    const days = daysSinceMove(c.id);
+    const step = stepMap[c.id]||0;
+    if(days!==null && days>=7 && step>0 && step<5) {
+      items.push({type:'urgent', name:c.name, desc:`No movement for ${days} days`, cid:c.id});
+    }
+  });
+  // Call booked - prep reminder
+  contacts.filter(c=>stepMap[c.id]===4).forEach(c=>{
+    items.push({type:'ready', name:c.name, desc:'Call booked — prep talking points', cid:c.id});
+  });
+  // Responded but no call yet
+  contacts.filter(c=>stepMap[c.id]===3).forEach(c=>{
+    items.push({type:'warn', name:c.name, desc:'Responded — schedule the call', cid:c.id});
+  });
+  // Not started at all
+  const notStarted = contacts.filter(c=>!stepMap[c.id]||stepMap[c.id]===0);
+  if(notStarted.length) items.push({type:'info', name:null, desc:`${notStarted.length} contacts not yet invited`, cid:null});
+  return items.slice(0,7);
 }
 
 function renderTracker() {
   const filtered = getFiltered();
+  const contacts = allContacts();
   const chips = [
-    {k:'all',l:'All'},{k:'tier1',l:'Tier 1'},{k:'tier2',l:'Tier 2'},{k:'tier3',l:'Tier 3'},
-    {k:'peer',l:'Peers'},{k:'ambassador',l:'Ambassadors'},{k:'responded',l:'Responded'},{k:'calls',l:'Calls set'}
+    {k:'all',l:'All ('+contacts.length+')'},{k:'tier1',l:'Tier 1'},{k:'tier2',l:'Tier 2'},
+    {k:'tier3',l:'Tier 3'},{k:'peer',l:'Peers'},{k:'ambassador',l:'Ambassadors'},
+    {k:'responded',l:'Responded'},{k:'calls',l:'Calls set'},
+    {k:'starred',l:'⭐ Starred',star:true},{k:'overdue',l:'⏰ Overdue',warn:true}
   ];
+  document.getElementById('topbar-sub').textContent = `${filtered.length} of ${contacts.length} contacts`;
+
+  const actionItems = buildActionItems();
+  const actionHtml = actionItems.length ? actionItems.map(item=>
+    `<div class="action-item" onclick="${item.cid?'openPanel('+item.cid+')':''}">
+      <div class="action-dot ${item.type}"></div>
+      ${item.name?`<span class="action-name">${item.name}</span>`:'<span class="action-name">Multiple</span>'}
+      <span class="action-desc">${item.desc}</span>
+    </div>`
+  ).join('') : '<div class="action-empty">All caught up! 🎉</div>';
+
   document.getElementById('content').innerHTML = `
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-val accent">${filtered.length}</div><div class="stat-label">Contacts</div></div>
-      <div class="stat-card"><div class="stat-val">${filtered.filter(c=>stepMap[c.id]>=1).length}</div><div class="stat-label">Invited</div></div>
-      <div class="stat-card"><div class="stat-val amber">${filtered.filter(c=>stepMap[c.id]>=3).length}</div><div class="stat-label">Responded</div></div>
-      <div class="stat-card"><div class="stat-val green">${filtered.filter(c=>stepMap[c.id]>=4).length}</div><div class="stat-label">Calls set</div></div>
+    <div class="action-panel">
+      <div class="action-panel-header">
+        <div class="action-panel-title">Today's actions</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text3);">${new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</span>
+      </div>
+      <div class="action-items">${actionHtml}</div>
     </div>
-    <div class="filters">${chips.map(f=>`<button class="filter-chip ${currentFilter===f.k?'active':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('')}</div>
-    <div class="contact-grid">${filtered.map(renderCard).join('')}</div>
-  `;
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val accent">${filtered.length}</div><div class="stat-label">Showing</div></div>
+      <div class="stat-card"><div class="stat-val">${filtered.filter(c=>(stepMap[c.id]||0)>=1).length}</div><div class="stat-label">Invited</div></div>
+      <div class="stat-card"><div class="stat-val amber">${filtered.filter(c=>(stepMap[c.id]||0)>=3).length}</div><div class="stat-label">Responded</div></div>
+      <div class="stat-card"><div class="stat-val sage">${filtered.filter(c=>(stepMap[c.id]||0)>=4).length}</div><div class="stat-label">Calls set</div></div>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Filter</span>
+      ${chips.map(f=>`<button class="filter-chip ${currentFilter===f.k?'active':''} ${f.star?'star-chip':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('')}
+    </div>
+    <div class="contact-list">${filtered.length ? filtered.map(renderCard).join('') : '<div class="empty-state">No contacts match.</div>'}</div>`;
 }
 
-const TAG_COLORS = {banking:'tag-blue',investing:'tag-green',peer:'tag-amber','ambassador-ib':'tag-coral',ambassador:'tag-pink',family:'tag-accent',consulting:'tag-accent'};
+const TAG_MAP = {banking:'tag-sky',investing:'tag-sage',peer:'tag-amber','ambassador-ib':'tag-coral',ambassador:'tag-rose',family:'tag-mauve',consulting:'tag-lavender'};
+const STATUS_MAP = [null,{label:'Invited',cls:'step-invited'},{label:'Accepted',cls:'step-accepted'},{label:'Responded',cls:'step-responded'},{label:'Call booked',cls:'step-call'},{label:'Done',cls:'step-done'}];
 
 function renderCard(c) {
-  const step = stepMap[c.id];
-  const tags = c.tags.map(t=>`<span class="tag ${TAG_COLORS[t]||'tag-accent'}">${t}</span>`).join('');
-  const responded = step>=3 ? '<span class="tag tag-green">responded</span>' : '';
+  const step = stepMap[c.id] || 0;
+  const tags = c.tags.map(t=>`<span class="tag ${TAG_MAP[t]||'tag-lavender'}">${t}</span>`).join('');
+  const statusInfo = STATUS_MAP[step];
+  const statusBadge = statusInfo ? `<span class="tag ${statusInfo.cls}">${statusInfo.label}</span>` : '';
+  const overdue = overdueLabel(c.id);
+  const overdueBadge = overdue ? `<span class="overdue-badge ${overdue.cls}">${overdue.label}</span>` : '';
+  const isStarred = !!starredMap[c.id];
+  const notePreview = notesMap[c.id] ? `<div class="card-note-preview">${notesMap[c.id].split('\n')[0].slice(0,80)}…</div>` : '';
+
   const pip = STEPS.map((label,i)=>{
     const done=step>i, cur=step===i;
-    return `<div class="pip-step"><div class="pip-dot ${done?'done':cur?'current':''}" onclick="event.stopPropagation();advance(${c.id},${done?-1:1})" title="${label}">✓</div><div class="pip-label ${done?'done':cur?'current':''}">${label}</div></div>${i<STEPS.length-1?`<div class="pip-line ${step>i?'done':step===i?'current':''}"></div>`:''}`;
+    const connector = i<STEPS.length-1 ? `<div class="pip-connector ${step>i?'done':(step===i?'active':'')}"></div>` : '';
+    return `<div class="pip-step">
+      <div class="pip-dot ${done?'done':cur?'current':''}" onclick="event.stopPropagation();advance(${c.id},${done?-(step-i):i-step})" title="${label}"></div>
+      <div class="pip-label ${done?'done':cur?'current':''}">${label}</div>
+    </div>${connector}`;
   }).join('');
-  return `<div class="contact-card ${c.tier}" onclick="openPanel(${c.id})">
-    <div class="card-header">
-      <div class="avatar" style="background:${c.av}">${c.initials}</div>
-      <div class="card-info">
-        <div class="card-name-row"><span class="card-name">${c.name}</span>${tags}${responded}</div>
-        <div class="card-role">${c.role}</div>
-        <div class="card-why">${c.why}</div>
+
+  return `<div class="contact-card ${c.tier||'custom'} ${openPanelId===c.id?'selected':''} ${isStarred?'starred':''}" onclick="openPanel(${c.id})">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="avatar" style="background:${c.av||'#ede9ff'};color:${c.avc||'#6050c0'}">${c.initials}</div>
+        <div class="card-meta">
+          <div class="card-name-row">
+            <span class="card-name">${c.name}</span>
+            ${tags}${statusBadge}${overdueBadge}
+          </div>
+          <div class="card-role">${c.role}</div>
+          <div class="card-why">${c.why||''}</div>
+          ${notePreview}
+        </div>
+        <div class="card-actions">
+          <button class="star-btn ${isStarred?'starred':''}" onclick="event.stopPropagation();toggleStar(${c.id})" title="${isStarred?'Unstar':'Star'}">★</button>
+        </div>
       </div>
+      <div class="pipeline"><div class="pip-track">${pip}</div></div>
     </div>
-    <div class="pipeline">${pip}</div>
   </div>`;
 }
 
 function advance(id, dir) {
-  stepMap[id] = Math.max(0,Math.min(5,stepMap[id]+dir));
-  saveState();
-  render();
+  stepMap[id] = Math.max(0, Math.min(5, (stepMap[id]||0) + dir));
+  movedMap[id] = Date.now();
+  saveState(); render();
   if(openPanelId===id) openPanel(id);
 }
-
+function toggleStar(id) {
+  starredMap[id] = !starredMap[id];
+  if(!starredMap[id]) delete starredMap[id];
+  saveState(); renderTracker();
+}
 function setFilter(f) { currentFilter=f; renderTracker(); }
+function onSearch(q) { searchQuery=q.trim(); renderTracker(); }
 
+/* ── Detail panel ── */
 function openPanel(id) {
   openPanelId = id;
-  const c = CONTACTS.find(x=>x.id===id);
-  const step = stepMap[id];
+  const c = allContacts().find(x=>x.id===id);
+  if(!c) return;
+  const step = stepMap[id]||0;
+  const isCustom = !BUILTIN_CONTACTS.find(x=>x.id===id);
+
   document.getElementById('panel-name').textContent = c.name;
   document.getElementById('panel-role').textContent = c.role;
+
+  const tierLabel = {tier1:'Tier 1 · Banking',tier2:'Tier 2 · Investing',tier3:'Tier 3 · Consulting',peer:'Peer',ambassador:'Ambassador',family:'Family',custom:'Custom','ambassador-ib':'Ambassador · IB'}[c.tier]||c.tier;
   const stepBtns = STEPS.map((s,i)=>`<button class="btn step-btn ${step===i?'btn-primary':'btn-ghost'}" onclick="advance(${id},${step>i?-(step-i):i-step})">${s}</button>`).join('');
+  const overdue = overdueLabel(id);
+
   document.getElementById('panel-body').innerHTML = `
-    <div class="panel-section">
+    <div>
       <div class="panel-section-title">Pipeline status</div>
+      ${overdue?`<div style="margin-bottom:10px;"><span class="overdue-badge ${overdue.cls}">⏰ No movement for ${overdue.label}</span></div>`:''}
       <div class="step-btns">${stepBtns}</div>
     </div>
-    <div class="panel-section">
-      <div class="panel-section-title">Why they matter</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6;">${c.why}</div>
+    <div>
+      <div class="panel-section-title">Details</div>
+      <div class="why-box">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:7px;">
+          <span class="tag tag-sky">${c.contact||'LinkedIn'}</span>
+          <span class="tag tag-lavender">${tierLabel}</span>
+          ${starredMap[id]?'<span class="tag tag-gold">⭐ Starred</span>':''}
+        </div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">${c.why||'—'}</div>
+      </div>
     </div>
-    ${c.note?`<div class="panel-section"><div class="panel-section-title">Connection note (300 char)</div><div class="msg-box">${c.note}</div><button class="copy-btn" onclick="cp(${id},'note')">Copy note</button></div>`:''}
-    <div class="panel-section">
-      <div class="panel-section-title">Follow-up message</div>
+    ${c.note?`<div>
+      <div class="panel-section-title">Connection note</div>
+      <div class="msg-box">${c.note}</div>
+      <button class="copy-btn" onclick="cp(${id},'note')">↗ Copy note</button>
+    </div>`:''}
+    ${c.message?`<div>
+      <div class="panel-section-title">Outreach message</div>
       <div class="msg-box">${c.message}</div>
-      <button class="copy-btn" onclick="cp(${id},'msg')">Copy message</button>
-    </div>
-    <div class="panel-section">
+      <button class="copy-btn" onclick="cp(${id},'msg')">↗ Copy message</button>
+    </div>`:''}
+    <div>
       <div class="panel-section-title">Your notes</div>
-      <textarea class="notes-input" placeholder="Notes about this contact, call prep, what they said..." oninput="saveNote(${id},this.value)">${notesMap[id]||''}</textarea>
+      <textarea class="notes-input" placeholder="Call prep, what they said, next steps…" oninput="saveNote(${id},this.value)">${notesMap[id]||''}</textarea>
     </div>
-  `;
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <button class="copy-btn" onclick="toggleStar(${id})">${starredMap[id]?'★ Unstar':'☆ Star this contact'}</button>
+      ${isCustom?`<button class="delete-contact-btn" onclick="deleteContact(${id})">✕ Remove contact</button>`:''}
+    </div>`;
+
   document.getElementById('detail-panel').classList.add('open');
 }
 
-function cp(id, type) {
-  const c = CONTACTS.find(x=>x.id===id);
+function cp(id,type) {
+  const c = allContacts().find(x=>x.id===id);
   navigator.clipboard.writeText(type==='note'?c.note:c.message).catch(()=>{});
 }
-function saveNote(id, val) { notesMap[id]=val; saveState(); }
-function closePanel() { document.getElementById('detail-panel').classList.remove('open'); openPanelId=null; }
+function saveNote(id,val) { notesMap[id]=val; saveState(); }
+function closePanel() {
+  document.getElementById('detail-panel').classList.remove('open');
+  openPanelId=null;
+}
+function deleteContact(id) {
+  if(!confirm('Remove this contact? This cannot be undone.')) return;
+  customContacts = customContacts.filter(c=>c.id!==id);
+  delete stepMap[id]; delete notesMap[id]; delete starredMap[id]; delete movedMap[id];
+  saveState(); closePanel(); render();
+}
 
+/* ── Add Contact Modal ── */
+function openAddModal() {
+  document.getElementById('add-modal').classList.add('open');
+  newContactTags = [];
+  document.querySelectorAll('.tag-pick').forEach(el=>el.classList.remove('selected'));
+  ['f-name','f-role','f-why','f-note','f-message','f-notes','prefill-bio'].forEach(id=>{
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+}
+function closeAddModal() { document.getElementById('add-modal').classList.remove('open'); }
+function toggleTag(el, tag) {
+  el.classList.toggle('selected');
+  if(newContactTags.includes(tag)) newContactTags = newContactTags.filter(t=>t!==tag);
+  else newContactTags.push(tag);
+}
+
+async function aiFillContact() {
+  const bio = document.getElementById('prefill-bio').value.trim();
+  if(!bio) return;
+  if(!apiKey) { alert('Enter your Anthropic API key in the AI Reply tab first.'); return; }
+
+  const btn = document.querySelector('.ai-prefill-bar .btn');
+  btn.textContent = '…'; btn.disabled = true;
+
+  const prompt = `Extract contact information from this LinkedIn bio/headline and return ONLY a JSON object:
+"${bio}"
+
+Return exactly:
+{
+  "name": "<full name if present, else null>",
+  "role": "<job title + company, e.g. VP at Goldman Sachs>",
+  "tier": "<one of: tier1, tier2, tier3, ambassador, ambassador-ib, peer, family — tier1 for IB/banking, tier2 for investing/PE/HF, tier3 for consulting, ambassador for MSF alumni, peer for current students>",
+  "tags": ["<from: banking, investing, consulting, peer, ambassador, family>"],
+  "why": "<1 sentence on why Jisha, MSF student targeting IB, should network with this person>",
+  "note": "<personalised 300-char LinkedIn connection request note from Jisha — warm, specific, no em dashes>",
+  "message": "<full outreach message, under 200 words, from Jisha, no em dashes, asks for 20-min call>"
+}`;
+
+  try {
+    const raw = await callClaude(prompt);
+    const cleaned = raw.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const data = JSON.parse(cleaned);
+    if(data.name) document.getElementById('f-name').value = data.name;
+    if(data.role) document.getElementById('f-role').value = data.role;
+    if(data.tier) document.getElementById('f-tier').value = data.tier;
+    if(data.why)  document.getElementById('f-why').value  = data.why;
+    if(data.note) document.getElementById('f-note').value = data.note;
+    if(data.message) document.getElementById('f-message').value = data.message;
+    if(data.tags) {
+      newContactTags = data.tags;
+      document.querySelectorAll('.tag-pick').forEach(el=>{
+        el.classList.toggle('selected', data.tags.includes(el.dataset?.tag || el.textContent.toLowerCase()));
+      });
+    }
+  } catch(e) { alert('Could not parse AI response. Fill in manually.'); }
+
+  btn.textContent = 'Auto-fill form ↓'; btn.disabled = false;
+}
+
+function saveNewContact() {
+  const name = document.getElementById('f-name').value.trim();
+  const role = document.getElementById('f-role').value.trim();
+  if(!name || !role) { alert('Name and Role are required.'); return; }
+
+  const palette = avatarForName(name);
+  const id = nextCustomId();
+  const tier = document.getElementById('f-tier').value;
+  const selectedTags = newContactTags.length ? newContactTags :
+    [['tier1','tier2'].includes(tier)?'banking':tier.includes('ambassador')?'ambassador':tier];
+
+  const contact = {
+    id, tier,
+    name,
+    initials: initialsFor(name),
+    av: palette.bg, avc: palette.fg,
+    role,
+    tags: selectedTags,
+    contact: document.getElementById('f-contact').value,
+    why:     document.getElementById('f-why').value.trim(),
+    note:    document.getElementById('f-note').value.trim(),
+    message: document.getElementById('f-message').value.trim(),
+  };
+
+  const notes = document.getElementById('f-notes').value.trim();
+  if(notes) notesMap[id] = notes;
+  stepMap[id] = 0;
+
+  customContacts.push(contact);
+  saveState();
+  closeAddModal();
+  currentFilter = 'all';
+  render();
+  setTimeout(()=>openPanel(id), 100);
+}
+
+/* ── Calendar ── */
 function renderCalendar() {
+  document.getElementById('topbar-sub').textContent = 'upcoming calls & follow-ups';
   document.getElementById('content').innerHTML = `
-    <div style="margin-bottom:20px;font-size:13px;color:var(--text2);">Confirmed calls and reminders. Green = call, amber = follow-up, coral = reminder.</div>
+    <div style="margin-bottom:14px;font-size:11.5px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;">
+      SAGE = confirmed call &nbsp;·&nbsp; AMBER = follow-up &nbsp;·&nbsp; ROSE = reminder
+    </div>
     <div class="calendar-grid">
-      ${CALENDAR.map(d=>`<div class="cal-day">
-        <div class="cal-day-label">${d.date}</div>
+      ${CALENDAR_EVENTS.map(d=>`<div class="cal-day">
+        <div class="cal-day-date">${d.date}</div>
         <div class="cal-day-name">${d.day}</div>
         ${d.events.map(e=>`<div class="cal-event ${e.type}">
           <div class="cal-event-title">${e.title}</div>
@@ -472,103 +944,206 @@ function renderCalendar() {
         </div>`).join('')}
       </div>`).join('')}
     </div>
-    <div style="margin-top:16px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;font-size:12px;color:var(--text2);line-height:1.7;">
-      <strong style="color:var(--text);">Michael Cox call prep</strong> — Open with "I know you're busy so I'll be mindful of the 20 minutes." Ask about his path from Continental Airlines to restructuring advisory, what matters most for MSF students targeting restructuring, and end with "Is there anyone else you'd recommend I speak with?" No em dashes. Keep it conversational.
-    </div>
-  `;
+    <div style="margin-top:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);font-size:12px;color:var(--text2);line-height:1.7;box-shadow:var(--shadow);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Call prep · Michael Cox</div>
+      Open with "I know you're busy so I'll be mindful of the 20 minutes." Ask about his path from Continental Airlines to restructuring advisory, what matters most for MSF students targeting restructuring, and end with "Is there anyone else you'd recommend I speak with?" No em dashes. Keep it conversational.
+    </div>`;
 }
 
+/* ── AI Reply ── */
 function renderAI() {
+  document.getElementById('topbar-sub').textContent = 'claude-powered reply suggestions';
   document.getElementById('content').innerHTML = `
     <div class="api-banner">
-      To use AI features outside of Claude.ai, you need an Anthropic API key. Get one free at <strong>console.anthropic.com</strong> then paste it below. It's saved locally in your browser only.
-      <input class="api-input" type="password" placeholder="sk-ant-..." value="${apiKey}" oninput="apiKey=this.value;saveState()" />
+      Requires an Anthropic API key from <strong>console.anthropic.com</strong> — stored locally only.
+      <input class="api-input" type="password" placeholder="sk-ant-…" value="${apiKey}" oninput="apiKey=this.value;saveState()" />
     </div>
     <div class="ai-section">
       <div class="ai-title">Reply suggester</div>
-      <div class="ai-sub">Paste a LinkedIn conversation. Get the ideal next reply, following your rules: no em dashes, warm but professional, always moves toward a clear next step.</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Conversation:</div>
-      <textarea class="textarea" id="convo-in" placeholder="Paste the full conversation here..."></textarea>
-      <div style="font-size:12px;color:var(--text2);margin:8px 0 6px;">Context (optional):</div>
-      <textarea class="textarea" id="ctx-in" placeholder="e.g. Michael Cox, restructuring IB, confirmed call Wednesday, I want to confirm the time..." style="min-height:60px;"></textarea>
+      <div class="ai-sub">Paste a LinkedIn conversation and get the ideal next reply — no em dashes, warm but professional, always moves toward a clear next step.</div>
+      <div class="field-label">Conversation</div>
+      <textarea class="textarea" id="convo-in" placeholder="Paste the full conversation here…"></textarea>
+      <div class="field-label" style="margin-top:10px;">Context (optional)</div>
+      <textarea class="textarea" id="ctx-in" placeholder="e.g. Michael Cox, restructuring IB, confirmed call Wednesday…" style="min-height:55px;"></textarea>
       <div style="display:flex;gap:8px;margin-top:12px;">
-        <button class="btn btn-primary" onclick="getReply()">Suggest reply</button>
+        <button class="btn btn-primary" onclick="getReply()">✦ Suggest reply</button>
         <button class="btn btn-ghost" onclick="document.getElementById('convo-in').value='';document.getElementById('reply-out').style.display='none'">Clear</button>
       </div>
       <div id="reply-out" style="display:none;margin-top:12px;">
-        <div class="panel-section-title" style="margin-bottom:8px;">Suggested reply</div>
+        <div class="field-label">Suggested reply</div>
         <div class="ai-result" id="reply-text"></div>
-        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('reply-text').textContent)" style="margin-top:8px;">Copy reply</button>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('reply-text').textContent)" style="margin-top:8px;">↗ Copy reply</button>
       </div>
     </div>
     <div class="ai-section">
       <div class="ai-title">Message generator</div>
-      <div class="ai-sub">Paste someone's LinkedIn headline or bio. Get a personalised outreach message from Jisha.</div>
-      <textarea class="textarea" id="gen-in" placeholder="e.g. VP at Goldman Sachs, previously McCombs MSF 2019, energy IB..."></textarea>
-      <button class="btn btn-primary" style="margin-top:12px;" onclick="genMessage()">Generate message</button>
+      <div class="ai-sub">Paste someone's LinkedIn bio and get a personalised outreach message from Jisha.</div>
+      <div class="field-label">LinkedIn bio / headline</div>
+      <textarea class="textarea" id="gen-in" placeholder="e.g. VP at Goldman Sachs, previously McCombs MSF 2019, energy IB…"></textarea>
+      <button class="btn btn-primary" style="margin-top:12px;" onclick="genMessage()">✦ Generate message</button>
       <div id="gen-out" style="display:none;margin-top:12px;">
-        <div class="panel-section-title" style="margin-bottom:8px;">Generated message</div>
+        <div class="field-label">Generated message</div>
         <div class="ai-result" id="gen-text"></div>
-        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('gen-text').textContent)" style="margin-top:8px;">Copy message</button>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('gen-text').textContent)" style="margin-top:8px;">↗ Copy message</button>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
+/* ── Auto-Update (Analyze) ── */
+function renderAnalyze() {
+  document.getElementById('topbar-sub').textContent = 'paste a chat → auto-update tracker & calendar';
+  document.getElementById('content').innerHTML = `
+    <div class="ai-section">
+      <div class="ai-title">Conversation analyzer</div>
+      <div class="ai-sub">Paste any LinkedIn thread, email, or a quick summary like "Jesse replied and wants to schedule next week." The AI identifies the contact, suggests a status update and calendar reminder, and shows you a preview before changing anything.</div>
+      <div class="api-banner" style="margin-bottom:16px;">
+        API key: ${apiKey ? '••••'+apiKey.slice(-4) : '<em>not set — go to AI Reply tab</em>'}
+      </div>
+      <div class="field-label">Paste conversation or summary</div>
+      <textarea class="textarea" id="analyze-in" style="min-height:150px;"
+        placeholder="e.g.\nWilliam: Hey Jisha, I'm free Tuesday June 10 at 3pm — does that work?\nJisha: Perfect, looking forward to it!\n\n— or just: 'Jesse replied positively and wants to hop on a call next week.'"></textarea>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+        <button class="btn btn-primary" onclick="runAnalysis()">✦ Analyze & suggest updates</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('analyze-in').value='';document.getElementById('analyze-results').innerHTML=''">Clear</button>
+      </div>
+      <div id="analyze-loading" style="display:none;margin-top:14px;align-items:center;gap:8px;">
+        <div class="dot-pulse"><span></span><span></span><span></span></div>
+        <span style="font-size:12px;color:var(--text3);">Reading conversation…</span>
+      </div>
+      <div id="analyze-results" style="margin-top:4px;"></div>
+    </div>`;
+}
+
+async function runAnalysis() {
+  if(!apiKey) { alert('Enter your Anthropic API key in the AI Reply tab first.'); return; }
+  const transcript = document.getElementById('analyze-in').value.trim();
+  if(!transcript) return;
+  document.getElementById('analyze-loading').style.display='flex';
+  document.getElementById('analyze-results').innerHTML='';
+
+  const contactList = allContacts().map(c=>
+    `ID:${c.id} | ${c.name} | ${c.role} | current_step:${stepMap[c.id]||0} (${STEPS[stepMap[c.id]||0]})`
+  ).join('\n');
+
+  const prompt = `You are analyzing a networking conversation for Jisha Goyal, incoming MSF student at UT Austin McCombs targeting investment banking.
+
+Contact list:
+${contactList}
+
+Pipeline steps 0–5: 0=Not started, 1=Invite sent, 2=Accepted, 3=Responded, 4=Call booked, 5=Done
+
+Transcript:
+"""${transcript}"""
+
+Identify the contact(s) involved, determine if status should change, extract dates/times, and write a note.
+
+Return ONLY a JSON array:
+[{"contactId":<number>,"contactName":"<string>","currentStep":<number>,"suggestedStep":<number>,"stepChanged":<bool>,"summary":"<1-2 sentences>","calendarNote":"<date/time or null>","noteToAdd":"<note or null>"}]
+
+If no match: [{"contactId":null,"contactName":null,"summary":"Could not identify a contact.","stepChanged":false}]`;
+
+  let result;
+  try {
+    const raw = await callClaude(prompt);
+    result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    document.getElementById('analyze-loading').style.display='none';
+    document.getElementById('analyze-results').innerHTML=`<div class="no-match-card">⚠ Could not parse response. Try again or rephrase.</div>`;
+    return;
+  }
+  document.getElementById('analyze-loading').style.display='none';
+  pendingProposals = result;
+  renderProposals(result);
+}
+
+function stepPillClass(s) { return ['step-none','step-invited','step-accepted','step-responded','step-call','step-done'][s]||''; }
+
+function renderProposals(proposals) {
+  const container = document.getElementById('analyze-results');
+  if(!proposals.length || proposals[0].contactId===null) {
+    container.innerHTML=`<div class="no-match-card">⚠ ${proposals[0]?.summary||'No contact matched. Try including their name.'}</div>`;
+    return;
+  }
+  container.innerHTML = proposals.map((p,idx)=>{
+    const c = allContacts().find(x=>x.id===p.contactId);
+    if(!c) return '';
+    const stepBefore = `<span class="step-pill ${stepPillClass(p.currentStep)}">${STEPS[p.currentStep]||'?'}</span>`;
+    const stepAfter  = `<span class="step-pill ${stepPillClass(p.suggestedStep)}">${STEPS[p.suggestedStep]||'?'}</span>`;
+    return `<div class="proposal-card" id="proposal-${idx}">
+      <div class="proposal-header">
+        <div class="proposal-avatar" style="background:${c.av};color:${c.avc}">${c.initials}</div>
+        <div><div class="proposal-name">${c.name}</div><div class="proposal-role">${c.role}</div></div>
+      </div>
+      <div class="proposal-row"><span class="proposal-key">Summary</span><span class="proposal-val">${p.summary}</span></div>
+      <div class="proposal-row"><span class="proposal-key">Status</span><span class="proposal-val">${p.stepChanged?`${stepBefore} <span class="proposal-arrow">→</span> ${stepAfter}`:`No change — ${stepBefore}`}</span></div>
+      ${p.calendarNote?`<div class="proposal-row"><span class="proposal-key">Reminder</span><span class="proposal-val">📅 ${p.calendarNote}</span></div>`:''}
+      ${p.noteToAdd?`<div class="proposal-row"><span class="proposal-key">Note</span><span class="proposal-val">${p.noteToAdd}</span></div>`:''}
+      <div class="proposal-actions">
+        <button class="btn btn-apply" onclick="applyProposal(${idx})">✓ Apply</button>
+        <button class="btn btn-dismiss" onclick="dismissProposal(${idx})">Dismiss</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyProposal(idx) {
+  const p = pendingProposals[idx];
+  if(!p?.contactId) return;
+  if(p.stepChanged && p.suggestedStep!==undefined) { stepMap[p.contactId]=p.suggestedStep; movedMap[p.contactId]=Date.now(); }
+  if(p.noteToAdd) { const e=notesMap[p.contactId]||''; notesMap[p.contactId]=e+(e?'\n\n':'')+p.noteToAdd; }
+  if(p.calendarNote) CALENDAR_EVENTS[0].events.push({type:'reminder',title:`${p.contactName}: ${p.calendarNote}`,sub:'Added from conversation analyzer'});
+  saveState();
+  document.getElementById(`proposal-${idx}`).outerHTML=`
+    <div class="success-flash">✓ <strong>${p.contactName}</strong> updated${p.stepChanged?` — status → <em>${STEPS[p.suggestedStep]}</em>`:''}${p.noteToAdd?' · note added':''}${p.calendarNote?' · reminder added':''}</div>`;
+  updateSidebar();
+}
+function dismissProposal(idx) {
+  const card=document.getElementById(`proposal-${idx}`);
+  if(card){card.style.opacity='.4';card.querySelectorAll('button').forEach(b=>b.disabled=true);}
+}
+
+/* ── Claude API ── */
 async function callClaude(prompt) {
-  if(!apiKey) return 'Please enter your Anthropic API key above to use AI features.';
+  if(!apiKey) return 'Please enter your Anthropic API key to use AI features.';
   const res = await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:prompt}]})
   });
   const d = await res.json();
   return d.content?.map(x=>x.text||'').join('')||'Error generating response.';
 }
 
 async function getReply() {
-  const convo = document.getElementById('convo-in').value.trim();
-  const ctx = document.getElementById('ctx-in').value.trim();
+  const convo=document.getElementById('convo-in').value.trim();
+  const ctx=document.getElementById('ctx-in').value.trim();
   if(!convo) return;
-  const out = document.getElementById('reply-out');
-  const txt = document.getElementById('reply-text');
+  const out=document.getElementById('reply-out'),txt=document.getElementById('reply-text');
   out.style.display='block';
   txt.innerHTML='<div class="dot-pulse"><span></span><span></span><span></span></div>';
-  const prompt = `You are helping Jisha Goyal, incoming MSF student at UT Austin McCombs, write a LinkedIn reply. She is an international student from Dubai targeting investment banking.
-
-Rules: no em dashes, short and natural, warm but professional, always move toward a clear next step, never overclaim.
-
-${ctx?'Context: '+ctx:''}
-
-Conversation:
-${convo}
-
-Write only Jisha's next reply. Nothing else.`;
-  txt.textContent = await callClaude(prompt);
+  txt.textContent = await callClaude(`You are helping Jisha Goyal, incoming MSF student at UT Austin McCombs, write a LinkedIn reply. She is an international student from Dubai targeting investment banking.\n\nRules: no em dashes, short and natural, warm but professional, always move toward a clear next step.\n\n${ctx?'Context: '+ctx:''}\n\nConversation:\n${convo}\n\nWrite only Jisha's next reply. Nothing else.`);
 }
 
 async function genMessage() {
-  const bio = document.getElementById('gen-in').value.trim();
+  const bio=document.getElementById('gen-in').value.trim();
   if(!bio) return;
-  const out = document.getElementById('gen-out');
-  const txt = document.getElementById('gen-text');
+  const out=document.getElementById('gen-out'),txt=document.getElementById('gen-text');
   out.style.display='block';
   txt.innerHTML='<div class="dot-pulse"><span></span><span></span><span></span></div>';
-  const prompt = `Write a LinkedIn outreach message from Jisha Goyal, incoming MSF student at UT Austin McCombs, to this contact: ${bio}
-
-Rules: no em dashes, start with "I am an incoming MSF student at McCombs", be specific to their role, ask for a 20-minute call, under 200 words, warm and natural. Write only the message.`;
-  txt.textContent = await callClaude(prompt);
+  txt.textContent = await callClaude(`Write a LinkedIn outreach message from Jisha Goyal, incoming MSF student at UT Austin McCombs, to this contact: ${bio}\n\nRules: no em dashes, start with "I am an incoming MSF student at McCombs", be specific to their role, ask for a 20-minute call, under 200 words, warm and natural. Write only the message.`);
 }
 
 function exportCSV() {
-  const rows = CONTACTS.map(c=>`"${c.name}","${c.role}","${STEPS[stepMap[c.id]]}","${(notesMap[c.id]||'').replace(/"/g,"'")}"`);
-  const csv = 'Name,Role,Status,Notes\n'+rows.join('\n');
+  const rows = allContacts().map(c=>`"${c.name}","${c.role}","${STEPS[stepMap[c.id]||0]}","${(notesMap[c.id]||'').replace(/"/g,"'")}"`);
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = 'msf_networking.csv';
+  a.href = URL.createObjectURL(new Blob(['Name,Role,Status,Notes\n'+rows.join('\n')],{type:'text/csv'}));
+  a.download='msf_networking.csv';
   a.click();
 }
 
+// Show search + add button on tracker view by default
+document.getElementById('search-wrap').style.display='block';
+document.getElementById('add-contact-btn').style.display='inline-flex';
 render();
 </script>
 </body>
