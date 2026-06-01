@@ -482,7 +482,7 @@ const DEFAULT_NOTES = {
   5:  'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',
   14: 'Call done May 27. Now at Pimco Austin. RJ practicum first choice. Oil & gas IB realistic path. Meet Suzanne week 1.',
   15: 'Call done May 30. CDS background = perfect for M&A per Jesse. Recruiting peaks Sep–Oct. Ohio State Sep 12 — he may come to Austin for Deloitte recruitment.',
-  16: 'Call booked Wed Jun 4 or Thu Jun 5 at 3pm CST. Send calendar invite to wgage@wolferesearch.com. Call him at +1 337 532 2706.',
+  16: 'Call TODAY Tue Jun 2 at 3pm CST. Invite accepted. Call +1 337 532 2706.',
   18: 'Call TODAY Jun 3 at 1:30pm CST via WhatsApp. His number: +1 517 940 2488.',
   22: 'Postponed — Jisha outside US timezone. Follow up ~Jun 16 when back in US.'
 };
@@ -681,14 +681,14 @@ function overdueLabel(id) {
 
 /* ── Calendar data (dynamic) ── */
 let CALENDAR_EVENTS = [
-  { day:'Today', date:'Wed Jun 3', events:[
+  { day:'Today', date:'Tue Jun 2', events:[
+    {type:'call', title:'Call: William Gage', sub:'Wolfe Research · call +1 337 532 2706', time:'3:00 PM CST'},
+    {type:'reminder', title:'Call prep: William Gage', sub:'Equity research pivot, MSF recruiting process, what moved the needle, Wolfe Research path'},
+    {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if 7+ days no reply'},
+  ]},
+  { day:'Tomorrow', date:'Wed Jun 3', events:[
     {type:'call', title:'Call: Nick Bryngelson', sub:'WhatsApp · +1 517 940 2488', time:'1:30 PM CST'},
     {type:'reminder', title:'Call prep: Nick Bryngelson', sub:'How he navigated MSF recruiting, RJ practicum, what to do before program starts, resume tips'},
-  ]},
-  { day:'This Week', date:'Wed–Thu Jun 4–5', events:[
-    {type:'call', title:'Call: William Gage', sub:'Send calendar invite to wgage@wolferesearch.com · call +1 337 532 2706', time:'3:00 PM CST'},
-    {type:'reminder', title:'Send calendar invite to William', sub:'Wed Jun 4 or Thu Jun 5 at 3pm — do this now'},
-    {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if 7+ days no reply'},
   ]},
   { day:'In 2 Weeks', date:'~Jun 16+', events:[
     {type:'followup', title:'Follow up: Dalton Kile', sub:'Reach out once back in US timezone — he suggested waiting'},
