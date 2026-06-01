@@ -474,7 +474,8 @@ const BUILTIN_CONTACTS = [
   { id:22, tier:'ambassador', name:'Dalton Kile',   initials:'DK', av:'#fde8ef', avc:'#b05070', role:'Associate, Susser Bank | MSF 2025',                       tags:['ambassador'],    contact:'LinkedIn',    why:'Responded positively. Follow up Monday to schedule call.', note:'Responded positively. Follow up Monday to schedule.', message:'Thank you so much Dalton, really appreciate it! Would sometime next week work for a quick call? Happy to work around your schedule.' }
 ];
 
-const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:5,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:3,15:4,16:3,17:1,18:3,19:1,20:1,21:2,22:3};
+// 5=Done: Michael Cox(5), Nicolas Liva(14), Jesse Davila(15)
+const DEFAULT_STEPS = {1:2,2:2,3:2,4:2,5:5,6:2,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:5,15:5,16:3,17:1,18:4,19:1,20:1,21:2,22:3};
 const DEFAULT_NOTES = {5:'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',14:'Available Thu or Fri this week. Confirming time.',18:'Confirmed call next week. Follow up Monday to schedule.',16:'Reach out Monday to schedule.',22:'Responded positively. Follow up Monday to schedule.'};
 
 /* ── Supabase ── */
@@ -606,12 +607,13 @@ async function loadFromSupabase() {
 }
 
 const st = loadLocalState(); // load localStorage immediately for fast start
-let stepMap      = st.steps;
-let notesMap     = st.notes;
-let apiKey       = st.apiKey;
+let stepMap        = st.steps;
+let notesMap       = st.notes;
+let apiKey         = st.apiKey;
 let customContacts = st.custom;
-let starredMap   = st.starred;
-let movedMap     = st.moved;
+let starredMap     = st.starred;
+let movedMap       = st.moved;
+let hiddenSet      = new Set(JSON.parse(localStorage.getItem('netcrm_hidden')||'[]'));
 
 let currentView   = 'tracker';
 let currentFilter = 'all';
@@ -621,7 +623,15 @@ let pendingProposals = [];
 let newContactTags = [];
 
 function allContacts() {
-  return [...BUILTIN_CONTACTS, ...customContacts];
+  return [...BUILTIN_CONTACTS, ...customContacts].filter(c=>!hiddenSet.has(c.id));
+}
+function hideContact(id) {
+  if(!confirm('Archive this contact? They\'ll be hidden from the tracker. You can restore from localStorage if needed.')) return;
+  hiddenSet.add(id);
+  localStorage.setItem('netcrm_hidden', JSON.stringify([...hiddenSet]));
+  // also mark hidden in supabase
+  db.from('contact_states').upsert({contact_id:id, step:stepMap[id]||0, notes:notesMap[id]||'', starred:false, moved_at:0, updated_at:new Date().toISOString()});
+  closePanel(); render();
 }
 
 /* ── Avatar helper for custom contacts ── */
@@ -659,24 +669,24 @@ function overdueLabel(id) {
 
 /* ── Calendar data (dynamic) ── */
 let CALENDAR_EVENTS = [
-  { day:'Today', date:'Mon Jun 2', events:[
-    {type:'followup', title:'Message William Gage', sub:'Schedule call this week'},
-    {type:'followup', title:'Message Nick Bryngelson', sub:'Schedule call this week'},
-    {type:'followup', title:'Message Dalton Kile', sub:'Schedule call this week'},
-    {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan'}
+  { day:'Tomorrow', date:'Wed Jun 3', events:[
+    {type:'call', title:'Call: Nick Bryngelson', sub:'IB Analyst, Raymond James Houston Energy', time:'1:30 PM CST'},
+    {type:'reminder', title:'Call prep: Nick Bryngelson', sub:'Ask about recruiting timeline, resume tips, how RJ practicum helped, what he\'d do differently'},
   ]},
   { day:'This Week', date:'Jun 3–6', events:[
-    {type:'call', title:'Call: Nicolas Liva', sub:'Fellow international MSF, RJ practicum', time:'TBD'}
+    {type:'followup', title:'Schedule: William Gage', sub:'Message to lock in a time this week or next'},
+    {type:'followup', title:'Schedule: Dalton Kile', sub:'Follow up — he responded positively'},
+    {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if no reply in 7d'},
   ]},
   { day:'Next Week', date:'Jun 9+', events:[
-    {type:'call', title:'Call: William Gage', sub:'Equity Research, Wolfe Research', time:'TBD'},
-    {type:'call', title:'Call: Nick Bryngelson', sub:'IB Analyst, Raymond James', time:'TBD'},
-    {type:'call', title:'Call: Jesse Davila', sub:'M&A Analytics Analyst', time:'TBD'},
-    {type:'call', title:'Call: Dalton Kile', sub:'Susser Bank', time:'TBD'}
+    {type:'call', title:'Call: William Gage', sub:'Equity Research Associate, Wolfe Research', time:'TBD'},
+    {type:'call', title:'Call: Dalton Kile', sub:'Associate, Susser Bank', time:'TBD'},
   ]},
-  { day:'Ongoing', date:'Check weekly', events:[
-    {type:'reminder', title:'Follow up Tier 1s if no reply in 7d', sub:'Marshall, Emilee, Jeff, Dan, Nabil'},
-  ]}
+  { day:'Calls Done ✓', date:'May 27–30', events:[
+    {type:'call', title:'✓ Michael Cox — Seabury Group', sub:'Restructuring IB. Offered intro at graduation. Sign up for his practicum.'},
+    {type:'call', title:'✓ Nicolas Liva — Pimco', sub:'Oil & gas IB is realistic path. RJ practicum first choice. Meet Suzanne week 1.'},
+    {type:'call', title:'✓ Jesse Davila — Deloitte', sub:'CDS background is perfect for M&A. Recruiting peaks Sep–Oct. Ohio State game Sep 12.'},
+  ]},
 ];
 
 /* ── Render engine ── */
@@ -915,7 +925,10 @@ function openPanel(id) {
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <button class="copy-btn" onclick="toggleStar(${id})">${starredMap[id]?'★ Unstar':'☆ Star this contact'}</button>
-      ${isCustom?`<button class="delete-contact-btn" onclick="deleteContact(${id})">✕ Remove contact</button>`:''}
+      <div style="display:flex;gap:10px;">
+        <button class="delete-contact-btn" onclick="hideContact(${id})">Archive</button>
+        ${isCustom?`<button class="delete-contact-btn" onclick="deleteContact(${id})" style="color:var(--red);">✕ Delete</button>`:''}
+      </div>
     </div>`;
 
   document.getElementById('detail-panel').classList.add('open');
