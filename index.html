@@ -899,7 +899,7 @@ function onSearch(q) { searchQuery=q.trim(); renderTracker(); }
 /* ── Detail panel ── */
 function openPanel(id) {
   openPanelId = id;
-  const c = allContacts().find(x=>x.id===id);
+  const c = [...BUILTIN_CONTACTS, ...customContacts].find(x=>x.id===id);
   if(!c) return;
   const step = stepMap[id]||0;
   const isCustom = !BUILTIN_CONTACTS.find(x=>x.id===id);
