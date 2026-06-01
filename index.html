@@ -135,6 +135,8 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
 .filter-chip.active { background:var(--lavender); color:white; border-color:var(--lavender); }
 .filter-chip.star-chip { color:var(--gold); border-color:var(--gold-md); background:var(--gold-lt); }
 .filter-chip.star-chip.active { background:var(--gold); color:white; border-color:var(--gold); }
+.filter-chip.arch-chip { color:var(--text3); border-color:var(--border2); background:var(--surface2); }
+.filter-chip.arch-chip.active { background:var(--text2); color:white; border-color:var(--text2); }
 
 /* ── Contact cards ── */
 .contact-list { display:flex; flex-direction:column; gap:8px; }
@@ -633,11 +635,14 @@ function allContacts() {
   return [...BUILTIN_CONTACTS, ...customContacts].filter(c=>!hiddenSet.has(c.id));
 }
 function hideContact(id) {
-  if(!confirm('Archive this contact? They\'ll be hidden from the tracker. You can restore from localStorage if needed.')) return;
+  if(!confirm('Archive this contact? You can restore them anytime from the Archived filter.')) return;
   hiddenSet.add(id);
   localStorage.setItem('netcrm_hidden', JSON.stringify([...hiddenSet]));
-  // also mark hidden in supabase
-  db.from('contact_states').upsert({contact_id:id, step:stepMap[id]||0, notes:notesMap[id]||'', starred:false, moved_at:0, updated_at:new Date().toISOString()});
+  closePanel(); render();
+}
+function restoreContact(id) {
+  hiddenSet.delete(id);
+  localStorage.setItem('netcrm_hidden', JSON.stringify([...hiddenSet]));
   closePanel(); render();
 }
 
@@ -736,16 +741,24 @@ function showView(v) {
 
 /* ── Tracker ── */
 function getFiltered() {
-  let list = allContacts();
-  if(currentFilter==='tier1')    list = list.filter(c=>c.tier==='tier1');
-  else if(currentFilter==='tier2')    list = list.filter(c=>c.tier==='tier2');
-  else if(currentFilter==='tier3')    list = list.filter(c=>c.tier==='tier3');
-  else if(currentFilter==='peer')     list = list.filter(c=>c.tier==='peer'||c.tier==='family');
+  // Archived view shows only hidden contacts
+  if(currentFilter==='archived') {
+    const allWithHidden = [...BUILTIN_CONTACTS, ...customContacts].filter(c=>hiddenSet.has(c.id));
+    return allWithHidden;
+  }
+
+  let list = allContacts(); // excludes hidden by default
+  if(currentFilter==='tier1')       list = list.filter(c=>c.tier==='tier1');
+  else if(currentFilter==='tier2')  list = list.filter(c=>c.tier==='tier2');
+  else if(currentFilter==='tier3')  list = list.filter(c=>c.tier==='tier3');
+  else if(currentFilter==='peer')   list = list.filter(c=>c.tier==='peer'||c.tier==='family');
   else if(currentFilter==='ambassador') list = list.filter(c=>c.tier.includes('ambassador'));
-  else if(currentFilter==='responded')  list = list.filter(c=>stepMap[c.id]>=3);
-  else if(currentFilter==='calls')      list = list.filter(c=>stepMap[c.id]>=4);
+  else if(currentFilter==='responded')  list = list.filter(c=>(stepMap[c.id]||0)>=3);
+  else if(currentFilter==='calls')      list = list.filter(c=>(stepMap[c.id]||0)>=4);
+  else if(currentFilter==='done')       list = list.filter(c=>(stepMap[c.id]||0)===5);
   else if(currentFilter==='starred')    list = list.filter(c=>starredMap[c.id]);
   else if(currentFilter==='overdue')    list = list.filter(c=>overdueLabel(c.id));
+
   if(searchQuery) {
     const q = searchQuery.toLowerCase();
     list = list.filter(c=>
@@ -754,7 +767,6 @@ function getFiltered() {
       (c.why||'').toLowerCase().includes(q)
     );
   }
-  // Starred float to top
   list.sort((a,b)=>(starredMap[b.id]?1:0)-(starredMap[a.id]?1:0));
   return list;
 }
@@ -791,7 +803,8 @@ function renderTracker() {
     {k:'all',l:'All ('+contacts.length+')'},{k:'tier1',l:'Tier 1'},{k:'tier2',l:'Tier 2'},
     {k:'tier3',l:'Tier 3'},{k:'peer',l:'Peers'},{k:'ambassador',l:'Ambassadors'},
     {k:'responded',l:'Responded'},{k:'calls',l:'Calls set'},
-    {k:'starred',l:'⭐ Starred',star:true},{k:'overdue',l:'⏰ Overdue',warn:true}
+    {k:'done',l:'✓ Calls done'},{k:'starred',l:'⭐ Starred',star:true},
+    {k:'overdue',l:'⏰ Overdue',warn:true},{k:'archived',l:'Archived',arch:true}
   ];
   document.getElementById('topbar-sub').textContent = `${filtered.length} of ${contacts.length} contacts`;
 
@@ -820,7 +833,7 @@ function renderTracker() {
     </div>
     <div class="filter-bar">
       <span class="filter-label">Filter</span>
-      ${chips.map(f=>`<button class="filter-chip ${currentFilter===f.k?'active':''} ${f.star?'star-chip':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('')}
+      ${chips.map(f=>`<button class="filter-chip ${currentFilter===f.k?'active':''} ${f.star?'star-chip':''} ${f.arch?'arch-chip':''}" onclick="setFilter('${f.k}')">${f.l}</button>`).join('')}
     </div>
     <div class="contact-list">${filtered.length ? filtered.map(renderCard).join('') : '<div class="empty-state">No contacts match.</div>'}</div>`;
 }
@@ -932,7 +945,9 @@ function openPanel(id) {
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <button class="copy-btn" onclick="toggleStar(${id})">${starredMap[id]?'★ Unstar':'☆ Star this contact'}</button>
       <div style="display:flex;gap:10px;">
-        <button class="delete-contact-btn" onclick="hideContact(${id})">Archive</button>
+        ${hiddenSet.has(id)
+          ? `<button class="delete-contact-btn" onclick="restoreContact(${id})" style="color:var(--sage);">↩ Restore</button>`
+          : `<button class="delete-contact-btn" onclick="hideContact(${id})">Archive</button>`}
         ${isCustom?`<button class="delete-contact-btn" onclick="deleteContact(${id})" style="color:var(--red);">✕ Delete</button>`:''}
       </div>
     </div>`;
