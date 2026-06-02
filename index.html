@@ -564,7 +564,7 @@ const BUILTIN_CONTACTS = [
   { id:20, tier:'ambassador', name:'Anna-Laura Houston', initials:'AH', av:'#fde8ef', avc:'#b05070', role:'Incoming Investment Analyst, VCIMCO | MSF 2026',   tags:['ambassador'],    contact:'LinkedIn',    why:'Investments at VCIMCO. Useful for buy-side intel.', note:'', message:'Hi Anna-Laura, I\'m joining the MSF program at McCombs this summer.\n\nI noticed you came from a non-business background, similar to my computational data science background.\n\nWould you be open to a quick chat?\n\nThank you!' },
   { id:21, tier:'family', name:'Vaibhav Joshi',     initials:'VJ', av:'#f0eaf8', avc:'#7050a0', role:'Senior Consultant, EY (SAP Supply Chain)',                tags:['family'],        contact:'Direct',      why:'Family friend at EY. Potential EY advisory introductions.', note:'', message:'Hi Vaibhav, hope you\'re doing well! I\'m starting an MSF at UT Austin McCombs this summer and targeting investment banking roles.\n\nWould you be up for a quick call? Would love to hear your perspective.' },
   { id:22, tier:'ambassador', name:'Dalton Kile',   initials:'DK', av:'#fde8ef', avc:'#b05070', role:'Associate, Susser Bank | MSF 2025',                       tags:['ambassador'],    contact:'LinkedIn',    why:'Responded positively. Follow up Monday to schedule call.', note:'Responded positively. Follow up Monday to schedule.', message:'Thank you so much Dalton, really appreciate it! Would sometime next week work for a quick call? Happy to work around your schedule.' },
-  { id:23, tier:'tier1',     name:'Aiden Huotari',  initials:'AH', av:'#dce8f5', avc:'#4a7aaa', role:'RBC Wealth Management — Structured Debt',                  tags:['banking'],       contact:'LinkedIn',    why:'Referred by Nick Bryngelson. Went for hedge fund, pivoted to RBC structured debt. Good perspective on resilience and non-obvious paths.', note:'', message:'Hi Aiden, Nick Bryngelson suggested I reach out. I am joining the MSF at McCombs this summer targeting IB and finance roles. Nick mentioned your recruiting journey and thought you would be a great person to connect with. Would love to chat sometime!' }
+  { id:23, tier:'tier1',     name:'Aiden Huotari',  initials:'AH', av:'#dce8f5', avc:'#4a7aaa', role:'Fixed Income Portfolio Advisor, RBC Wealth Management | MSF McCombs', tags:['banking','investing'], contact:'LinkedIn', why:'Referred by Nick Bryngelson. St. John\'s → Garda Capital internship (hedge fund) → MSF McCombs → RBC Fixed Income Minneapolis. Resilience story + non-obvious path intel.', note:'', message:'Hi Aiden, Nick Bryngelson suggested I reach out. I am joining the MSF at McCombs this summer targeting IB and finance roles. Nick mentioned your recruiting journey and thought you would be a great person to connect with. Would love to chat sometime!' }
 ];
 
 // 5=Done: Michael Cox(5), Nicolas(14), Jesse(15), Nick(18) | 4=Call booked: William(16) | 2=Connected: Aiden(23)
@@ -585,7 +585,7 @@ const SUPA_KEY = 'sb_publishable_IALxcQpXxVdQfi-lKNUwFQ_3KhTUQPf';
 const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 /* ── State ── */
-const DATA_VERSION = '20250603-2'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
+const DATA_VERSION = '20250603-3'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
 
 function loadLocalState() {
   try {
@@ -793,23 +793,25 @@ function overdueLabel(id) {
 
 /* ── Calendar data (dynamic) ── */
 let CALENDAR_EVENTS = [
-  { day:'Today — Calls Day 🎯', date:'Tue Jun 3 (GST)', events:[
-    {type:'call',     title:'① Nick Bryngelson — WhatsApp +1 517 940 2488', sub:'IB Analyst, Raymond James Houston Energy', time:'10:30 PM GST  ·  1:30 PM CST'},
-    {type:'reminder', title:'Nick prep: his RJ recruiting journey', sub:'How he got the offer · what to do before MSF starts · practicum advice · international student tips · "who else should I talk to?"'},
-    {type:'call',     title:'② William Gage — call +1 337 532 2706', sub:'Equity Research Associate, Wolfe Research', time:'12:00 AM GST (Wed)  ·  3:00 PM CST'},
+  { day:'Today — William Gage Call 🎯', date:'Tue Jun 3 (GST)', events:[
+    {type:'call',     title:'William Gage — call +1 337 532 2706', sub:'Equity Research Associate, Wolfe Research', time:'12:00 AM GST (Wed)  ·  3:00 PM CST'},
     {type:'reminder', title:'William prep: equity research pivot', sub:'How MSF recruiting works · what moved the needle · Wolfe Research path · advice for incoming students · "who else should I talk to?"'},
   ]},
   { day:'This Week', date:'Jun 4–6', events:[
-    {type:'reminder', title:'Add notes from Nick & William calls', sub:'Update tracker same day while it\'s fresh'},
+    {type:'reminder', title:'Add notes from William\'s call', sub:'Update tracker same day while it\'s fresh'},
+    {type:'followup', title:'Connect with Aiden Huotari on LinkedIn', sub:'Referred by Nick — linkedin.com/in/aidenhuotari · message pre-written in his card'},
+    {type:'reminder', title:'Review banking deadlines doc from Nick', sub:'app.the-trackr.com/us-finance-2027/full-time-programmes — bookmark & check regularly from July'},
     {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if 7+ days no reply'},
   ]},
   { day:'In 2 Weeks', date:'~Jun 16+', events:[
     {type:'followup', title:'Follow up: Dalton Kile', sub:'Reach out once back in US timezone — he suggested waiting'},
+    {type:'followup', title:'Schedule call with Aiden Huotari', sub:'Once connected on LinkedIn — ask about his MSF recruiting journey and RBC path'},
   ]},
-  { day:'Calls Done ✓', date:'May 27–30', events:[
+  { day:'Calls Done ✓', date:'May 27 – Jun 3', events:[
     {type:'call', title:'✓ Michael Cox — Seabury Group', sub:'Offered intro at graduation. Sign up for his practicum in fall.'},
-    {type:'call', title:'✓ Nicolas Liva — Pimco', sub:'RJ practicum = first choice. Oil & gas IB realistic. Meet Suzanne week 1.'},
-    {type:'call', title:'✓ Jesse Davila — Deloitte', sub:'CDS background is perfect. Recruiting peaks Sep–Oct. Ohio State Sep 12.'},
+    {type:'call', title:'✓ Nicolas Liva — Pimco Austin', sub:'RJ practicum = first choice. Oil & gas IB realistic. Meet Suzanne week 1.'},
+    {type:'call', title:'✓ Jesse Davila — M&A Analytics', sub:'CDS background is perfect. Recruiting peaks Sep–Oct. Ohio State Sep 12.'},
+    {type:'call', title:'✓ Nick Bryngelson — RJ Houston Energy', sub:'Start outreach late June. Spindle Top primer. BIWS 400 Qs. Study group 8pm–midnight. Trackr doc received.'},
   ]},
 ];
 
