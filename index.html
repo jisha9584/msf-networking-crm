@@ -573,7 +573,7 @@ const DEFAULT_NOTES = {
   5:  'Confirmed call Wednesday after 2pm Central. PREP: restructuring questions, referral ask.',
   14: 'Call done May 27. Now at Pimco Austin. RJ practicum first choice. Oil & gas IB realistic path. Meet Suzanne week 1.',
   15: 'Call done May 30. CDS background = perfect for M&A per Jesse. Recruiting peaks Sep–Oct. Ohio State Sep 12 — he may come to Austin for Deloitte recruitment.',
-  16: 'CALL TODAY 3pm CST / 12am GST. Call +1 337 532 2706.\n\nPREP:\n— How did you decide on equity research vs IB?\n— Walk me through MSF recruiting — when did you start, what worked?\n— What would you do differently before the program started?\n— How did you land Wolfe Research specifically?\n— What should I be doing right now, 2 months before MSF starts?\n— Who else at McCombs should I be talking to?',
+  16: 'CALL THURSDAY Jun 5 @ 3pm CST / 11pm GST. Call +1 337 532 2706. (Pushed from Tue — last minute meeting)\n\nPREP:\n— How did you decide on equity research vs IB?\n— Walk me through MSF recruiting — when did you start, what worked?\n— What would you do differently before the program started?\n— How did you land Wolfe Research specifically?\n— What should I be doing right now, 2 months before MSF starts?\n— Who else at McCombs should I be talking to?',
   18: 'Call done Jun 3. Biology/Neuroscience undergrad → Macquarie energy internship → MSF → RJ Houston Energy IB offer Oct 1.\n\nHow he got the offer: Started LinkedIn outreach late June. Messaged 4-5 people at RJ, treated every call like an interview. RJ did a happy hour in Austin then a football game tailgate — by then he had months of relationship building. An associate asked for his resume = essentially in. First round mid-August, offer Oct 1.\n\nRJ Houston numbers: 4 seats. 3 went to interns. 1 at-large seat for entire US. Houston has 150-260 analyst seats across 24 banks per year. 120-130 go to interns. Only 1-4 at-large seats per bank for everyone else. This is why Dr. Butler is cautious — the math is genuinely hard.\n\nTech prep: Spindle Top (SMU oil & gas technical primer) + BIWS 400 questions. Study group of 4-5 people 8pm-midnight every night. Out of 7-8 who tried for banking, 5 got in.\n\nPassion > perfection: Being fluent on oil & gas carried more than technical answers. Template-based work — they want pattern recognition and industry passion. Be honest when you don\'t know — explain thought process, never bullshit.\n\nInternational: No bias at all. Has international people in his own analyst class (Curry T, girl from Australia). Only issue is company sponsorship.\n\nAI: Thinks it will narrow classes slightly short term but not eliminate roles. RJ closed twice the deals this year. 3-5 year deal backlog = rebound hiring likely.\n\nReferred me to Aiden Huotari (linkedin.com/in/aidenhuotari) — went for hedge fund, landed at RBC structured debt. Good resilience perspective.\n\nKey resource: app.the-trackr.com/us-finance-2027/full-time-programmes — live database of US finance FT recruiting timelines. Check regularly from July.\n\nMay come to Austin for RJ networking event in football season — stay in touch.',
   22: 'Postponed — Jisha outside US timezone. Follow up ~Jun 16 when back in US.',
   23: 'Referred by Nick Bryngelson (Jun 3 call). Went through 3-month process for a hedge fund, did not get it, landed at RBC doing highly structured debt products. Nick described him as resilient — good perspective on pivoting and non-obvious paths.\n\nConnection note sent: "Hi Aiden, Nick Bryngelson suggested I reach out. I am joining the MSF at McCombs this summer targeting IB and finance roles. Nick mentioned your recruiting journey and thought you would be a great person to connect with. Would love to chat sometime!"\n\nFollow up: Schedule a call once connected.'
@@ -585,7 +585,7 @@ const SUPA_KEY = 'sb_publishable_IALxcQpXxVdQfi-lKNUwFQ_3KhTUQPf';
 const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 /* ── State ── */
-const DATA_VERSION = '20250603-4'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
+const DATA_VERSION = '20250603-5'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
 
 function loadLocalState() {
   try {
@@ -793,8 +793,8 @@ function overdueLabel(id) {
 
 /* ── Calendar data (dynamic) ── */
 let CALENDAR_EVENTS = [
-  { day:'Today — William Gage Call 🎯', date:'Tue Jun 3 (GST)', events:[
-    {type:'call',     title:'William Gage — call +1 337 532 2706', sub:'Equity Research Associate, Wolfe Research', time:'12:00 AM GST (Wed)  ·  3:00 PM CST'},
+  { day:'Thursday — William Gage Call 🎯', date:'Thu Jun 5', events:[
+    {type:'call',     title:'William Gage — call +1 337 532 2706', sub:'Equity Research Associate, Wolfe Research', time:'3:00 PM CST  ·  11:00 PM GST'},
     {type:'reminder', title:'William prep: equity research pivot', sub:'How MSF recruiting works · what moved the needle · Wolfe Research path · advice for incoming students · "who else should I talk to?"'},
   ]},
   { day:'This Week', date:'Jun 4–6', events:[
