@@ -320,6 +320,34 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
   .clock-date { display: none; }
 }
 
+/* ── Timezone Converter ── */
+.tz-converter { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px 24px; margin-bottom:16px; box-shadow:var(--shadow); }
+.tz-converter-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; margin-bottom:4px; }
+.tz-converter-sub { font-size:12px; color:var(--text2); margin-bottom:20px; line-height:1.6; }
+.tz-input-row { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px; }
+.tz-field { display:flex; flex-direction:column; gap:5px; }
+.tz-time-input { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; font-size:22px; font-family:'JetBrains Mono',monospace; color:var(--text); outline:none; width:160px; text-align:center; letter-spacing:.04em; transition:border-color .12s; }
+.tz-time-input:focus { border-color:var(--lavender-md); background:#fff; }
+.tz-zone-select { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; font-size:14px; font-family:'JetBrains Mono',monospace; color:var(--text); outline:none; cursor:pointer; transition:border-color .12s; min-width:130px; }
+.tz-zone-select:focus { border-color:var(--lavender-md); }
+.tz-results { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+@media(max-width:768px) { .tz-results { grid-template-columns:repeat(2,1fr); } .tz-input-row { flex-direction:column; } .tz-time-input { width:100%; } }
+.tz-result-card { border-radius:var(--radius-lg); border:1px solid var(--border); padding:16px 18px; text-align:center; background:var(--surface); transition:all .15s; }
+.tz-result-card.source { border-color:var(--lavender-md); background:var(--lavender-lt); }
+.tz-result-card.source .tz-result-time { color:var(--lavender); }
+.tz-result-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; }
+.tz-result-card.source .tz-result-label { color:var(--lavender); }
+.tz-result-time { font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:500; color:var(--text); line-height:1; margin-bottom:4px; }
+.tz-result-date { font-size:10px; color:var(--text3); font-family:'JetBrains Mono',monospace; margin-bottom:4px; }
+.tz-result-city { font-size:11px; color:var(--text2); }
+.tz-next-day { font-family:'JetBrains Mono',monospace; font-size:8px; background:var(--amber-lt); color:var(--amber); border:1px solid var(--amber-md); padding:1px 6px; border-radius:20px; display:inline-block; margin-top:3px; letter-spacing:.05em; text-transform:uppercase; }
+.tz-prev-day { font-family:'JetBrains Mono',monospace; font-size:8px; background:var(--rose-lt); color:var(--rose); border:1px solid var(--rose-md); padding:1px 6px; border-radius:20px; display:inline-block; margin-top:3px; letter-spacing:.05em; text-transform:uppercase; }
+.tz-quick-times { margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+.tz-quick-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px; }
+.tz-quick-pills { display:flex; gap:7px; flex-wrap:wrap; }
+.tz-quick-pill { padding:5px 13px; border-radius:20px; font-size:11.5px; font-weight:500; cursor:pointer; border:1px solid var(--border2); color:var(--text2); background:var(--surface); transition:all .13s; font-family:'Jost',sans-serif; }
+.tz-quick-pill:hover { color:var(--text); background:var(--surface2); border-color:var(--lavender-md); }
+
 /* ── Analyze proposals ── */
 .proposal-card{border-radius:var(--radius-lg);border:1.5px solid var(--lavender-md);background:var(--lavender-lt);padding:18px 20px;margin-bottom:10px;}
 .proposal-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -389,6 +417,7 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
       <div class="nav-item" onclick="showView('calendar')" id="nav-calendar"><span class="nav-icon">◷</span><span class="nav-label">Calendar</span></div>
       <div class="nav-item" onclick="showView('analyze')" id="nav-analyze"><span class="nav-icon">⟳</span><span class="nav-label">Auto-Update</span></div>
       <div class="nav-item" onclick="showView('ai')" id="nav-ai"><span class="nav-icon">✦</span><span class="nav-label">AI Reply</span></div>
+      <div class="nav-item" onclick="showView('convert')" id="nav-convert"><span class="nav-icon">⇄</span><span class="nav-label">Convert TZ</span></div>
     </nav>
     <div class="sidebar-bottom" id="sidebar-stats-container"></div>
   </div>
@@ -768,6 +797,7 @@ function render() {
   if(currentView==='tracker')  renderTracker();
   else if(currentView==='calendar') renderCalendar();
   else if(currentView==='analyze')  renderAnalyze();
+  else if(currentView==='convert')  renderConvert();
   else renderAI();
 }
 
@@ -792,9 +822,9 @@ function updateSidebar() {
 
 function showView(v) {
   currentView = v;
-  ['tracker','calendar','analyze','ai'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
+  ['tracker','calendar','analyze','ai','convert'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
   document.getElementById('nav-'+v).classList.add('active');
-  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply'}[v];
+  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply',convert:'Time Converter'}[v];
   document.getElementById('search-wrap').style.display    = v==='tracker' ? 'block' : 'none';
   document.getElementById('add-contact-btn').style.display = v==='tracker' ? 'inline-flex' : 'none';
   closePanel();
@@ -810,13 +840,18 @@ function getFiltered() {
   }
 
   let list = allContacts(); // excludes hidden by default
+  // In all views except explicit done/archived filters, hide completed contacts
+  const donelessFilters = ['done','archived','starred'];
+  if(!donelessFilters.includes(currentFilter)) {
+    list = list.filter(c=>(stepMap[c.id]||0)<5);
+  }
   if(currentFilter==='tier1')       list = list.filter(c=>c.tier==='tier1');
   else if(currentFilter==='tier2')  list = list.filter(c=>c.tier==='tier2');
   else if(currentFilter==='tier3')  list = list.filter(c=>c.tier==='tier3');
   else if(currentFilter==='peer')   list = list.filter(c=>c.tier==='peer'||c.tier==='family');
   else if(currentFilter==='ambassador') list = list.filter(c=>c.tier.includes('ambassador'));
-  else if(currentFilter==='responded')  list = list.filter(c=>(stepMap[c.id]||0)>=3);
-  else if(currentFilter==='calls')      list = list.filter(c=>(stepMap[c.id]||0)>=4);
+  else if(currentFilter==='responded')  list = list.filter(c=>(stepMap[c.id]||0)===3);
+  else if(currentFilter==='calls')      list = list.filter(c=>(stepMap[c.id]||0)===4);
   else if(currentFilter==='done')       list = list.filter(c=>(stepMap[c.id]||0)===5);
   else if(currentFilter==='starred')    list = list.filter(c=>starredMap[c.id]);
   else if(currentFilter==='overdue')    list = list.filter(c=>overdueLabel(c.id));
