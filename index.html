@@ -1087,7 +1087,7 @@ function toggleTag(el, tag) {
 async function aiFillContact() {
   const bio = document.getElementById('prefill-bio').value.trim();
   if(!bio) return;
-  if(!apiKey) { alert('Enter your Anthropic API key in the AI Reply tab first.'); return; }
+  if(!apiKey) { alert('Enter your Gemini API key in the AI Reply tab first.'); return; }
 
   const btn = document.querySelector('.ai-prefill-bar .btn');
   btn.textContent = '…'; btn.disabled = true;
@@ -1191,8 +1191,8 @@ function renderAI() {
   document.getElementById('topbar-sub').textContent = 'claude-powered reply suggestions';
   document.getElementById('content').innerHTML = `
     <div class="api-banner">
-      Requires an Anthropic API key from <strong>console.anthropic.com</strong> — stored locally only.
-      <input class="api-input" type="password" placeholder="sk-ant-…" value="${apiKey}" oninput="apiKey=this.value;saveState()" />
+      Requires a Gemini API key from <strong>aistudio.google.com</strong> — stored locally only, never sent anywhere except Google.
+      <input class="api-input" type="password" placeholder="AIza…" value="${apiKey}" oninput="apiKey=this.value;saveState()" />
     </div>
     <div class="ai-section">
       <div class="ai-title">Reply suggester</div>
@@ -1251,7 +1251,7 @@ function renderAnalyze() {
 }
 
 async function runAnalysis() {
-  if(!apiKey) { alert('Enter your Anthropic API key in the AI Reply tab first.'); return; }
+  if(!apiKey) { alert('Enter your Gemini API key in the AI Reply tab first.'); return; }
   const transcript = document.getElementById('analyze-in').value.trim();
   if(!transcript) return;
   document.getElementById('analyze-loading').style.display='flex';
@@ -1344,14 +1344,15 @@ function dismissProposal(idx) {
 
 /* ── Claude API ── */
 async function callClaude(prompt) {
-  if(!apiKey) return 'Please enter your Anthropic API key to use AI features.';
-  const res = await fetch('https://api.anthropic.com/v1/messages',{
+  if(!apiKey) return 'Please enter your Gemini API key to use AI features.';
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:prompt}]})
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:800}})
   });
   const d = await res.json();
-  return d.content?.map(x=>x.text||'').join('')||'Error generating response.';
+  if(d.error) return 'API error: ' + d.error.message;
+  return d.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('')||'Error generating response.';
 }
 
 async function getReply() {
