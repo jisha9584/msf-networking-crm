@@ -1273,7 +1273,7 @@ Transcript:
 
 Identify the contact(s) involved, determine if status should change, extract dates/times, and write a note.
 
-Return ONLY a JSON array:
+IMPORTANT: Respond with ONLY a raw JSON array. No markdown, no code fences, no explanation. Just the array starting with [ and ending with ].
 [{"contactId":<number>,"contactName":"<string>","currentStep":<number>,"suggestedStep":<number>,"stepChanged":<bool>,"summary":"<1-2 sentences>","calendarNote":"<date/time or null>","noteToAdd":"<note or null>"}]
 
 If no match: [{"contactId":null,"contactName":null,"summary":"Could not identify a contact.","stepChanged":false}]`;
@@ -1281,10 +1281,14 @@ If no match: [{"contactId":null,"contactName":null,"summary":"Could not identify
   let result;
   try {
     const raw = await callClaude(prompt);
-    result = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    // Strip markdown fences, grab the first JSON array found
+    const cleaned = raw.replace(/```json|```/gi,'').trim();
+    const match = cleaned.match(/\[[\s\S]*\]/);
+    if(!match) throw new Error('No JSON array found in: ' + raw.slice(0,200));
+    result = JSON.parse(match[0]);
   } catch(e) {
     document.getElementById('analyze-loading').style.display='none';
-    document.getElementById('analyze-results').innerHTML=`<div class="no-match-card">⚠ Could not parse response. Try again or rephrase.</div>`;
+    document.getElementById('analyze-results').innerHTML=`<div class="no-match-card">⚠ Could not parse response: ${e.message}</div>`;
     return;
   }
   document.getElementById('analyze-loading').style.display='none';
