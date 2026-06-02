@@ -1381,6 +1381,113 @@ function exportCSV() {
   a.click();
 }
 
+/* ── Timezone Converter ── */
+function renderConvert() {
+  document.getElementById('topbar-sub').textContent = 'instant time zone conversion';
+  const nowGST = new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('content').innerHTML = `
+    <div class="tz-converter">
+      <div class="tz-converter-title">Time Zone Converter</div>
+      <div class="tz-converter-sub">Type any time, pick the source zone — see it instantly in all four zones.</div>
+      <div class="tz-input-row">
+        <div class="tz-field">
+          <div class="field-label">Time</div>
+          <input class="tz-time-input" id="tz-time-in" type="time" value="${nowGST}" oninput="convertTZ()">
+        </div>
+        <div class="tz-field">
+          <div class="field-label">Source zone</div>
+          <select class="tz-zone-select" id="tz-source" onchange="convertTZ()">
+            <option value="Asia/Dubai">GST — Dubai 🇦🇪</option>
+            <option value="America/Chicago">CDT — Austin 🤠</option>
+            <option value="America/New_York">EDT — New York 🗽</option>
+            <option value="Europe/London">UTC — London 🇬🇧</option>
+          </select>
+        </div>
+      </div>
+      <div class="tz-results" id="tz-results"></div>
+      <div class="tz-quick-times">
+        <div class="tz-quick-label">Quick — GST times</div>
+        <div class="tz-quick-pills">
+          <button class="tz-quick-pill" onclick="setQuick('09:00','Asia/Dubai')">9:00 AM</button>
+          <button class="tz-quick-pill" onclick="setQuick('12:00','Asia/Dubai')">12:00 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('18:00','Asia/Dubai')">6:00 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('21:00','Asia/Dubai')">9:00 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('22:30','Asia/Dubai')">10:30 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('00:00','Asia/Dubai')">12:00 AM</button>
+        </div>
+        <div class="tz-quick-label" style="margin-top:12px;">Quick — CDT (Austin) times</div>
+        <div class="tz-quick-pills">
+          <button class="tz-quick-pill" onclick="setQuick('09:00','America/Chicago')">9:00 AM</button>
+          <button class="tz-quick-pill" onclick="setQuick('12:00','America/Chicago')">12:00 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('13:30','America/Chicago')">1:30 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('15:00','America/Chicago')">3:00 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('17:00','America/Chicago')">5:00 PM</button>
+          <button class="tz-quick-pill" onclick="setQuick('18:00','America/Chicago')">6:00 PM</button>
+        </div>
+      </div>
+    </div>`;
+  convertTZ();
+}
+
+const TZ_ZONES = [
+  { label:'GST', city:'Dubai 🇦🇪',  tz:'Asia/Dubai'       },
+  { label:'CDT', city:'Austin 🤠',   tz:'America/Chicago'  },
+  { label:'EDT', city:'New York 🗽', tz:'America/New_York' },
+  { label:'UTC', city:'London 🇬🇧', tz:'Europe/London'    },
+];
+
+function convertTZ() {
+  const timeVal = document.getElementById('tz-time-in')?.value;
+  const sourceTz = document.getElementById('tz-source')?.value;
+  const resultsEl = document.getElementById('tz-results');
+  if(!timeVal || !sourceTz || !resultsEl) return;
+
+  // Build a reference Date in UTC that represents "today at timeVal in sourceTz"
+  const now = new Date();
+  const todayInSource = now.toLocaleDateString('en-CA', { timeZone: sourceTz }); // YYYY-MM-DD
+  // Find UTC offset for source tz right now
+  const srcFmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone: sourceTz,
+    year:'numeric',month:'2-digit',day:'2-digit',
+    hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
+  });
+  const parts = {};
+  srcFmt.formatToParts(now).forEach(({type,value}) => parts[type]=value);
+  const srcNowLocal = new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`);
+  const offsetMs = now - srcNowLocal;
+  const inputLocal = new Date(`${todayInSource}T${timeVal}:00`);
+  const absoluteUtc = new Date(inputLocal.getTime() + offsetMs);
+
+  const srcDay = new Date(todayInSource).getDate();
+
+  resultsEl.innerHTML = TZ_ZONES.map(z => {
+    const isSource = z.tz === sourceTz;
+    const timeStr = absoluteUtc.toLocaleTimeString('en-US',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',hour12:true});
+    const dateStr = absoluteUtc.toLocaleDateString('en-US',{timeZone:z.tz,weekday:'short',month:'short',day:'numeric'});
+    const targetDay = new Date(absoluteUtc.toLocaleDateString('en-CA',{timeZone:z.tz})).getDate();
+    let dayBadge = '';
+    if(targetDay > srcDay || (srcDay >= 28 && targetDay < 5))
+      dayBadge = '<span class="tz-next-day">+1 day</span>';
+    else if(targetDay < srcDay && !(srcDay < 5 && targetDay >= 28))
+      dayBadge = '<span class="tz-prev-day">-1 day</span>';
+    return `<div class="tz-result-card ${isSource?'source':''}">
+      <div class="tz-result-label">${z.label}${isSource?' · source':''}</div>
+      <div class="tz-result-time">${timeStr}</div>
+      <div class="tz-result-date">${dateStr}</div>
+      ${dayBadge}
+      <div class="tz-result-city">${z.city}</div>
+    </div>`;
+  }).join('');
+}
+
+function setQuick(time, tz) {
+  const t = document.getElementById('tz-time-in');
+  const s = document.getElementById('tz-source');
+  if(!t||!s) return;
+  t.value = time; s.value = tz;
+  convertTZ();
+}
+
 /* ── Live clocks ── */
 const ZONES = [
   { label:'GST', city:'Dubai 🇦🇪',    tz:'Asia/Dubai',          active: true  },
