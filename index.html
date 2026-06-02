@@ -585,11 +585,31 @@ const SUPA_KEY = 'sb_publishable_IALxcQpXxVdQfi-lKNUwFQ_3KhTUQPf';
 const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 /* ── State ── */
+const DATA_VERSION = '20250603-2'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
+
 function loadLocalState() {
   try {
+    const savedVersion = localStorage.getItem('netcrm_version');
+    const isStale = savedVersion !== DATA_VERSION;
+
+    // On version mismatch: merge defaults in for builtin contacts only,
+    // preserving any notes/steps the user has manually set on top
+    const savedSteps = JSON.parse(localStorage.getItem('netcrm_steps')) || {};
+    const savedNotes = JSON.parse(localStorage.getItem('netcrm_notes')) || {};
+
+    const steps = isStale ? {...DEFAULT_STEPS, ...savedSteps} : (savedSteps || {...DEFAULT_STEPS});
+    const notes = isStale ? {...DEFAULT_NOTES, ...savedNotes} : (savedNotes || {...DEFAULT_NOTES});
+
+    // On version bump, force defaults to win for builtin contacts
+    if(isStale) {
+      Object.keys(DEFAULT_STEPS).forEach(id => { steps[id] = DEFAULT_STEPS[id]; });
+      Object.keys(DEFAULT_NOTES).forEach(id => { notes[id] = DEFAULT_NOTES[id]; });
+      localStorage.setItem('netcrm_version', DATA_VERSION);
+    }
+
     return {
-      steps:   JSON.parse(localStorage.getItem('netcrm_steps'))   || {...DEFAULT_STEPS},
-      notes:   JSON.parse(localStorage.getItem('netcrm_notes'))   || {...DEFAULT_NOTES},
+      steps,
+      notes,
       apiKey:  localStorage.getItem('netcrm_apikey') || '',
       custom:  JSON.parse(localStorage.getItem('netcrm_custom'))  || [],
       starred: JSON.parse(localStorage.getItem('netcrm_starred')) || {},
