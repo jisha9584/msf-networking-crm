@@ -585,7 +585,7 @@ const SUPA_KEY = 'sb_publishable_IALxcQpXxVdQfi-lKNUwFQ_3KhTUQPf';
 const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 /* ── State ── */
-const DATA_VERSION = '20250603-3'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
+const DATA_VERSION = '20250603-4'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
 
 function loadLocalState() {
   try {
@@ -799,7 +799,7 @@ let CALENDAR_EVENTS = [
   ]},
   { day:'This Week', date:'Jun 4–6', events:[
     {type:'reminder', title:'Add notes from William\'s call', sub:'Update tracker same day while it\'s fresh'},
-    {type:'followup', title:'Connect with Aiden Huotari on LinkedIn', sub:'Referred by Nick — linkedin.com/in/aidenhuotari · message pre-written in his card'},
+    {type:'call', title:'✓ Connected with Aiden Huotari on LinkedIn', sub:'Referred by Nick — message sent Jun 3. Follow up once he accepts to schedule a call.'},
     {type:'reminder', title:'Review banking deadlines doc from Nick', sub:'app.the-trackr.com/us-finance-2027/full-time-programmes — bookmark & check regularly from July'},
     {type:'reminder', title:'Check Tier 1 responses', sub:'Nabil, Marshall, Emilee, Jeff, Dan — follow up if 7+ days no reply'},
   ]},
