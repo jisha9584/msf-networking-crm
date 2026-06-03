@@ -1646,15 +1646,18 @@ function renderStudyPlan() {
       const itemsHtml = topic.items.map((item, i) => {
         const key = topic.id+'-'+i;
         const done = !!p[key];
+        const doneCls = done ? 'done' : '';
         return `<div class="study-item" onclick="toggleStudyItem('${key}')">
-          <div class="study-item-box ${done?'done'}">✓</div>
-          <div class="study-item-text ${done?'done'}">${item}</div>
+          <div class="study-item-box ${doneCls}">&#10003;</div>
+          <div class="study-item-text ${doneCls}">${item}</div>
         </div>`;
       }).join('');
+      const topicDoneCls = allDone ? 'done' : '';
+      const topicKeys = topic.items.map((_,i)=>"'"+topic.id+'-'+i+"'").join(',');
       return `<div class="study-topic">
-        <div class="study-topic-header" onclick="toggleStudyTopic('${topic.id}',[${topic.items.map((_,i)=>"'"+topic.id+'-'+i+"'").join(',')}])">
-          <div class="study-topic-check ${allDone?'done'}">✓</div>
-          <div class="study-topic-name ${allDone?'done'}">${topic.name}</div>
+        <div class="study-topic-header" onclick="toggleStudyTopic('${topic.id}',[${topicKeys}])">
+          <div class="study-topic-check ${topicDoneCls}">&#10003;</div>
+          <div class="study-topic-name ${topicDoneCls}">${topic.name}</div>
         </div>
         <div class="study-items">${itemsHtml}</div>
         <div class="study-resource">📺 ${topic.resource}</div>
