@@ -367,6 +367,59 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
 .success-flash{background:var(--sage-lt);border:1.5px solid var(--sage-md);border-radius:var(--radius-lg);padding:14px 18px;font-size:13px;color:var(--sage);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .no-match-card{border-radius:var(--radius-lg);border:1.5px solid var(--amber-md);background:var(--amber-lt);padding:16px 18px;margin-top:16px;font-size:12.5px;color:var(--amber);line-height:1.6;}
 
+/* ── Study Plan ── */
+.study-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.study-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;text-align:center;box-shadow:var(--shadow);}
+.study-stat-val{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;line-height:1;letter-spacing:-0.02em;}
+.study-stat-label{font-size:11px;color:var(--text3);margin-top:4px;}
+.study-week{margin-bottom:24px;}
+.study-week-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.study-week-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
+.week-1-badge{background:var(--sky-lt);color:var(--sky);border:1px solid var(--sky-md);}
+.week-2-badge{background:var(--lavender-lt);color:var(--lavender);border:1px solid var(--lavender-md);}
+.week-3-badge{background:var(--sage-lt);color:var(--sage);border:1px solid var(--sage-md);}
+.study-week-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;}
+.study-week-sub{font-size:12px;color:var(--text3);margin-top:1px;}
+.study-week-progress{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.study-week-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);}
+.study-week-bar{width:80px;height:4px;background:var(--surface3);border-radius:4px;overflow:hidden;}
+.study-week-bar-fill{height:100%;border-radius:4px;transition:width .3s ease;}
+.study-topics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:900px){.study-topics{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.study-topics{grid-template-columns:1fr;}.study-stats{grid-template-columns:repeat(3,1fr);}}
+.study-topic{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:0;}
+.study-topic-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;padding:2px 0;}
+.study-topic-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border2);background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:12px;}
+.study-topic-check.done{background:var(--sage);border-color:var(--sage);color:white;}
+.study-topic-name{font-weight:600;font-size:13px;line-height:1.35;flex:1;}
+.study-topic-name.done{color:var(--text3);text-decoration:line-through;}
+.study-items{display:flex;flex-direction:column;gap:1px;margin-bottom:10px;}
+.study-item{display:flex;align-items:flex-start;gap:10px;padding:6px 4px;border-radius:6px;cursor:pointer;transition:background .1s;}
+.study-item:hover{background:var(--surface2);}
+.study-item-box{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);background:var(--surface);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;}
+.study-item-box.done{background:var(--sage);border-color:var(--sage);color:white;}
+.study-item-text{font-size:12px;color:var(--text2);line-height:1.5;flex:1;}
+.study-item-text.done{color:var(--text3);text-decoration:line-through;}
+.study-resource{margin-top:auto;padding-top:8px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.04em;}
+.study-note{background:var(--gold-lt);border:1px solid var(--gold-md);border-radius:var(--radius-lg);padding:14px 18px;font-size:12.5px;color:var(--text2);line-height:1.7;margin-top:4px;}
+.study-note strong{color:var(--gold);}
+
+/* ── Calendar edit mode ── */
+.cal-event-done{opacity:.5;text-decoration:line-through;}
+.cal-event-actions{display:flex;gap:6px;margin-top:7px;}
+.cal-done-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;border:1px solid var(--sage-md);background:var(--sage-lt);color:var(--sage);cursor:pointer;transition:all .12s;letter-spacing:.04em;}
+.cal-done-btn:hover{background:var(--sage);color:white;}
+.cal-done-btn.undone{border-color:var(--border2);background:var(--surface2);color:var(--text3);}
+.cal-done-btn.undone:hover{background:var(--surface3);color:var(--text2);}
+.cal-add-btn{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:3px 9px;border-radius:20px;border:1px solid var(--lavender-md);background:var(--lavender-lt);color:var(--lavender);cursor:pointer;transition:all .12s;letter-spacing:.04em;}
+.cal-add-btn:hover{background:var(--lavender);color:white;}
+.cal-add-row{display:flex;gap:6px;margin-top:8px;}
+.cal-add-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:6px 10px;font-size:12px;font-family:'Jost',sans-serif;color:var(--text);outline:none;}
+.cal-add-input:focus{border-color:var(--lavender-md);}
+.cal-edit-toggle{font-family:'JetBrains Mono',monospace;font-size:9px;padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);color:var(--text3);cursor:pointer;letter-spacing:.04em;transition:all .12s;}
+.cal-edit-toggle:hover{color:var(--text);background:var(--surface3);}
+.cal-edit-toggle.active{background:var(--lavender-lt);border-color:var(--lavender-md);color:var(--lavender);}
+
 /* ── Modal ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(42,34,24,.35);backdrop-filter:blur(4px);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
@@ -418,6 +471,7 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
       <div class="nav-item" onclick="showView('analyze')" id="nav-analyze"><span class="nav-icon">⟳</span><span class="nav-label">Auto-Update</span></div>
       <div class="nav-item" onclick="showView('ai')" id="nav-ai"><span class="nav-icon">✦</span><span class="nav-label">AI Reply</span></div>
       <div class="nav-item" onclick="showView('convert')" id="nav-convert"><span class="nav-icon">⇄</span><span class="nav-label">Convert TZ</span></div>
+      <div class="nav-item" onclick="showView('study')" id="nav-study"><span class="nav-icon">◈</span><span class="nav-label">Study Plan</span></div>
     </nav>
     <div class="sidebar-bottom" id="sidebar-stats-container"></div>
   </div>
@@ -585,7 +639,7 @@ const SUPA_KEY = 'sb_publishable_IALxcQpXxVdQfi-lKNUwFQ_3KhTUQPf';
 const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 /* ── State ── */
-const DATA_VERSION = '20250603-5'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
+const DATA_VERSION = '20250603-6'; // bump this whenever DEFAULT_STEPS or DEFAULT_NOTES change
 
 function loadLocalState() {
   try {
@@ -822,6 +876,7 @@ function render() {
   else if(currentView==='calendar') renderCalendar();
   else if(currentView==='analyze')  renderAnalyze();
   else if(currentView==='convert')  renderConvert();
+  else if(currentView==='study')    renderStudyPlan();
   else renderAI();
 }
 
@@ -846,9 +901,9 @@ function updateSidebar() {
 
 function showView(v) {
   currentView = v;
-  ['tracker','calendar','analyze','ai','convert'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
+  ['tracker','calendar','analyze','ai','convert','study'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
   document.getElementById('nav-'+v).classList.add('active');
-  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply',convert:'Time Converter'}[v];
+  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply',convert:'Time Converter',study:'Study Plan'}[v];
   document.getElementById('search-wrap').style.display    = v==='tracker' ? 'block' : 'none';
   document.getElementById('add-contact-btn').style.display = v==='tracker' ? 'inline-flex' : 'none';
   closePanel();
@@ -1188,20 +1243,73 @@ function saveNewContact() {
 }
 
 /* ── Calendar ── */
+let calEditMode = false;
+let calDoneMap = JSON.parse(localStorage.getItem('netcrm_caldone')||'{}');
+
+function toggleCalDone(dayIdx, evIdx) {
+  const key = dayIdx+'-'+evIdx;
+  calDoneMap[key] ? delete calDoneMap[key] : calDoneMap[key] = true;
+  localStorage.setItem('netcrm_caldone', JSON.stringify(calDoneMap));
+  renderCalendar();
+}
+
+function addCalEvent(dayIdx) {
+  const titleEl = document.getElementById('cal-add-title-'+dayIdx);
+  const subEl   = document.getElementById('cal-add-sub-'+dayIdx);
+  const typeEl  = document.getElementById('cal-add-type-'+dayIdx);
+  const title = titleEl?.value.trim();
+  if(!title) return;
+  CALENDAR_EVENTS[dayIdx].events.push({type: typeEl?.value||'reminder', title, sub: subEl?.value.trim()||''});
+  renderCalendar();
+}
+
+function removeCalEvent(dayIdx, evIdx) {
+  CALENDAR_EVENTS[dayIdx].events.splice(evIdx, 1);
+  const key = dayIdx+'-'+evIdx;
+  delete calDoneMap[key];
+  localStorage.setItem('netcrm_caldone', JSON.stringify(calDoneMap));
+  renderCalendar();
+}
+
 function renderCalendar() {
   document.getElementById('topbar-sub').textContent = 'upcoming calls & follow-ups';
+  const editMode = calEditMode;
   document.getElementById('content').innerHTML = `
-    <div style="margin-bottom:14px;font-size:11.5px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;">
-      SAGE = confirmed call &nbsp;·&nbsp; AMBER = follow-up &nbsp;·&nbsp; ROSE = reminder
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:11.5px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;">
+        SAGE = call &nbsp;·&nbsp; AMBER = follow-up &nbsp;·&nbsp; ROSE = reminder
+      </div>
+      <button class="cal-edit-toggle ${editMode?'active':''}" onclick="calEditMode=!calEditMode;renderCalendar()">
+        ${editMode?'✓ Done editing':'✏ Edit calendar'}
+      </button>
     </div>
     <div class="calendar-grid">
-      ${CALENDAR_EVENTS.map(d=>`<div class="cal-day">
+      ${CALENDAR_EVENTS.map((d,dayIdx)=>`<div class="cal-day">
         <div class="cal-day-date">${d.date}</div>
         <div class="cal-day-name">${d.day}</div>
-        ${d.events.map(e=>`<div class="cal-event ${e.type}">
-          <div class="cal-event-title">${e.title}</div>
-          <div class="cal-event-sub">${e.sub}${e.time?' · '+e.time:''}</div>
-        </div>`).join('')}
+        ${d.events.map((e,evIdx)=>{
+          const isDone = !!calDoneMap[dayIdx+'-'+evIdx];
+          return `<div class="cal-event ${e.type} ${isDone?'cal-event-done':''}">
+            <div class="cal-event-title">${e.title}</div>
+            <div class="cal-event-sub">${e.sub}${e.time?' · '+e.time:''}</div>
+            <div class="cal-event-actions">
+              <button class="cal-done-btn ${isDone?'undone':''}" onclick="toggleCalDone(${dayIdx},${evIdx})">
+                ${isDone?'↩ Undo':'✓ Done'}
+              </button>
+              ${editMode?`<button class="cal-done-btn undone" onclick="removeCalEvent(${dayIdx},${evIdx})" style="border-color:var(--red-md);color:var(--red);">✕ Remove</button>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+        ${editMode?`<div class="cal-add-row">
+          <input class="cal-add-input" id="cal-add-title-${dayIdx}" placeholder="Add event…">
+          <input class="cal-add-input" id="cal-add-sub-${dayIdx}" placeholder="Details…" style="max-width:130px;">
+          <select class="cal-add-input" id="cal-add-type-${dayIdx}" style="max-width:90px;cursor:pointer;">
+            <option value="reminder">reminder</option>
+            <option value="call">call</option>
+            <option value="followup">followup</option>
+          </select>
+          <button class="cal-add-btn" onclick="addCalEvent(${dayIdx})">+ Add</button>
+        </div>`:''}
       </div>`).join('')}
     </div>
     <div style="margin-top:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);font-size:12px;color:var(--text2);line-height:1.7;box-shadow:var(--shadow);">
@@ -1408,6 +1516,174 @@ function exportCSV() {
   a.href = URL.createObjectURL(new Blob(['Name,Role,Status,Notes\n'+rows.join('\n')],{type:'text/csv'}));
   a.download='msf_networking.csv';
   a.click();
+}
+
+/* ── Study Plan ── */
+const STUDY_PLAN = [
+  { id:'w1', badge:'Week 1', badgeCls:'week-1-badge', title:'Finance fundamentals', sub:'The language of everything that follows', topics:[
+    { id:'w1-3fs', name:'Three financial statements', resource:'Wall Street Prep / Investopedia', items:[
+      'Understand what the income statement shows',
+      'Understand what the balance sheet shows',
+      'Understand what the cash flow statement shows',
+      'Explain how the three connect to each other',
+      'Practice: "if net income goes up by $100 what happens to each statement"',
+    ]},
+    { id:'w1-ebitda', name:'EBITDA', resource:'Investopedia YouTube', items:[
+      'Define EBITDA in plain English',
+      'Know why interest and taxes are excluded',
+      'Know why depreciation is added back',
+      'Practice calculating EBITDA from an income statement',
+      'Understand why analysts prefer EBITDA over net income',
+    ]},
+    { id:'w1-margins', name:'Revenue, costs and margins', resource:'Aswath Damodaran', items:[
+      'Understand gross margin vs operating margin vs net margin',
+      'Know what COGS means',
+      'Understand fixed vs variable costs',
+      'Read one company earnings report (any public company)',
+    ]},
+  ]},
+  { id:'w2', badge:'Week 2', badgeCls:'week-2-badge', title:'Valuation core', sub:'DCF, enterprise value, and how companies are bought and sold', topics:[
+    { id:'w2-dcf', name:'DCF — discounted cash flow', resource:'Aswath Damodaran', items:[
+      'Understand time value of money — why $1 today is worth more than $1 tomorrow',
+      'Understand what a discount rate is',
+      'Understand free cash flow — what it is and how it differs from net income',
+      'Walk through a simple DCF example step by step',
+      'Understand terminal value — what happens after your projection period',
+    ]},
+    { id:'w2-ev', name:'Enterprise value vs equity value', resource:'Wall Street Prep', items:[
+      'Understand enterprise value — what the whole company is worth',
+      'Understand equity value — what shareholders own',
+      'Know the formula: EV = equity value + debt – cash',
+      'Understand why we use EV not equity value in most deals',
+    ]},
+    { id:'w2-comps', name:'Comps — comparable company analysis', resource:'Afzal Hussein', items:[
+      'Understand what EV/EBITDA multiple means',
+      'Understand why we compare companies to peers',
+      'Find 3 public oil and gas companies and compare their EV/EBITDA',
+      'Understand what a premium or discount to comps means',
+    ]},
+    { id:'w2-ma', name:'M&A basics', resource:'Wall Street Prep', items:[
+      'Understand buy-side vs sell-side in M&A',
+      'Understand why companies do acquisitions',
+      'Know what accretion and dilution mean in M&A context',
+      'Understand what a merger model is at a high level',
+    ]},
+  ]},
+  { id:'w3', badge:'Week 3', badgeCls:'week-3-badge', title:'Oil and gas fundamentals', sub:'Your genuine edge — Dubai background plus technical knowledge', topics:[
+    { id:'w3-industry', name:'Industry structure', resource:'YouTube: "oil gas explained"', items:[
+      'Understand upstream — exploration and production (E&P)',
+      'Understand midstream — pipelines and transportation',
+      'Understand downstream — refining and retail',
+      'Know what LNG is — relevant to Nick\'s Macquarie background',
+      'Know 5 major E&P companies by name',
+    ]},
+    { id:'w3-prices', name:'How oil prices work', resource:'WSJ / Reuters energy section', items:[
+      'Understand OPEC and how it affects supply',
+      'Understand how interest rates affect oil prices',
+      'Understand the Strait of Hormuz and why it matters — relevant to Dubai',
+      'Follow current oil price and know roughly where WTI and Brent are trading',
+      'Read one article per day about energy markets',
+    ]},
+    { id:'w3-spindle', name:'Spindle Top primer', resource:'SMU Spindle Top — read daily', items:[
+      'Download and start the Spindle Top SMU primer',
+      'Read section on E&P company valuation',
+      'Read section on reserves — 1P 2P 3P',
+      'Read section on production and decline curves',
+      'Read section on oil and gas deal structures',
+    ]},
+    { id:'w3-macro', name:'Macro and current events', resource:'Bloomberg / WSJ daily', items:[
+      'Follow one energy journalist on Twitter/X',
+      'Set up Google Alerts for "oil and gas IB" and "energy M&A"',
+      'Know the current macro headwinds and tailwinds for oil and gas',
+      'Form one opinion about where oil prices are headed and why',
+      'Practice dropping one market fact naturally in conversation',
+    ]},
+  ]},
+];
+
+// Study progress stored in localStorage as {itemKey: true}
+function getStudyProgress() {
+  try { return JSON.parse(localStorage.getItem('netcrm_study') || '{}'); } catch(e) { return {}; }
+}
+function saveStudyProgress(p) {
+  localStorage.setItem('netcrm_study', JSON.stringify(p));
+}
+
+function toggleStudyItem(key) {
+  const p = getStudyProgress();
+  p[key] ? delete p[key] : p[key] = true;
+  saveStudyProgress(p);
+  renderStudyPlan();
+}
+
+function toggleStudyTopic(topicId, items) {
+  const p = getStudyProgress();
+  const allDone = items.every((_,i) => p[topicId+'-'+i]);
+  items.forEach((_,i) => { allDone ? delete p[topicId+'-'+i] : p[topicId+'-'+i] = true; });
+  saveStudyProgress(p);
+  renderStudyPlan();
+}
+
+function renderStudyPlan() {
+  document.getElementById('topbar-sub').textContent = '3-week IB prep — finance fundamentals → oil & gas';
+  const p = getStudyProgress();
+
+  // Count totals
+  let totalItems = 0, doneItems = 0;
+  STUDY_PLAN.forEach(w => w.topics.forEach(t => {
+    t.items.forEach((_,i) => { totalItems++; if(p[t.id+'-'+i]) doneItems++; });
+  }));
+  const pct = totalItems ? Math.round((doneItems/totalItems)*100) : 0;
+
+  const weeksHtml = STUDY_PLAN.map(week => {
+    let wTotal = 0, wDone = 0;
+    week.topics.forEach(t => t.items.forEach((_,i) => { wTotal++; if(p[t.id+'-'+i]) wDone++; }));
+    const wPct = wTotal ? Math.round((wDone/wTotal)*100) : 0;
+    const wColor = week.id==='w1' ? 'var(--sky)' : week.id==='w2' ? 'var(--lavender)' : 'var(--sage)';
+
+    const topicsHtml = week.topics.map(topic => {
+      const allDone = topic.items.every((_,i) => p[topic.id+'-'+i]);
+      const itemsHtml = topic.items.map((item, i) => {
+        const key = topic.id+'-'+i;
+        const done = !!p[key];
+        return `<div class="study-item" onclick="toggleStudyItem('${key}')">
+          <div class="study-item-box ${done?'done'}">✓</div>
+          <div class="study-item-text ${done?'done'}">${item}</div>
+        </div>`;
+      }).join('');
+      return `<div class="study-topic">
+        <div class="study-topic-header" onclick="toggleStudyTopic('${topic.id}',[${topic.items.map((_,i)=>"'"+topic.id+'-'+i+"'").join(',')}])">
+          <div class="study-topic-check ${allDone?'done'}">✓</div>
+          <div class="study-topic-name ${allDone?'done'}">${topic.name}</div>
+        </div>
+        <div class="study-items">${itemsHtml}</div>
+        <div class="study-resource">📺 ${topic.resource}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="study-week">
+      <div class="study-week-header">
+        <span class="study-week-badge ${week.badgeCls}">${week.badge}</span>
+        <div><div class="study-week-title">${week.title}</div><div class="study-week-sub">${week.sub}</div></div>
+        <div class="study-week-progress">
+          <span class="study-week-pct">${wDone}/${wTotal}</span>
+          <div class="study-week-bar"><div class="study-week-bar-fill" style="width:${wPct}%;background:${wColor};"></div></div>
+        </div>
+      </div>
+      <div class="study-topics">${topicsHtml}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="stats-row study-stats">
+      <div class="study-stat"><div class="study-stat-val">${totalItems}</div><div class="study-stat-label">Total topics</div></div>
+      <div class="study-stat"><div class="study-stat-val sage">${doneItems}</div><div class="study-stat-label">Completed</div></div>
+      <div class="study-stat"><div class="study-stat-val ${pct===100?'sage':'accent'}">${pct}%</div><div class="study-stat-label">Progress</div></div>
+    </div>
+    ${weeksHtml}
+    <div class="study-note">
+      <strong>Remember what Nick said:</strong> passion for oil and gas carried more than technical perfection. Your goal is not to memorize every formula — it is to understand concepts well enough to have a real conversation and show genuine interest in the sector.
+    </div>`;
 }
 
 /* ── Timezone Converter ── */
