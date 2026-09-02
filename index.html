@@ -321,6 +321,52 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
 }
 
 /* ── Timezone Converter ── */
+/* Jobs tab */
+.jobs-wrap { max-width:800px; margin:0 auto; }
+.jobs-legend { font-size:11px; color:var(--text2); margin-bottom:16px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.firms-list { display:flex; flex-direction:column; gap:10px; }
+.firm-row { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 16px; box-shadow:var(--shadow); }
+.firm-row-top { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.firm-name { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; flex:1; }
+.firm-badges { display:flex; gap:5px; flex-wrap:wrap; }
+.firm-score { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text3); min-width:28px; text-align:right; }
+.firm-roles { font-size:12px; color:var(--text2); margin-bottom:5px; }
+.firm-contacts { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:5px; }
+.firm-contact-chip { background:var(--lavender-lt); color:var(--lavender); font-size:11px; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.firm-notes { font-size:12px; color:var(--text2); line-height:1.5; margin-bottom:6px; }
+.firm-link { font-size:11px; color:var(--lavender); font-family:'JetBrains Mono',monospace; text-decoration:none; }
+.firm-link:hover { text-decoration:underline; }
+.badge-pri-a { background:#d4f0d4; color:#2a7a2a; font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.badge-pri-b { background:#fde8c8; color:#a05010; font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.badge-pri-c { background:var(--surface2); color:var(--text2); font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.badge-sponsor-yes { background:#d4f0d4; color:#2a7a2a; font-size:10px; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.badge-sponsor-no  { background:#fde4e4; color:#a03030; font-size:10px; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.badge-sponsor-unk { background:var(--surface2); color:var(--text3); font-size:10px; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+.badge-austin { background:#e0f2ea; color:#3a8a60; font-size:10px; padding:2px 7px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+/* Morning tab */
+.morning-wrap { max-width:640px; margin:0 auto; }
+.morning-header { margin-bottom:20px; }
+.morning-date { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; margin-bottom:4px; }
+.morning-progress-label { font-size:12px; color:var(--text2); margin-bottom:6px; }
+.morning-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.morning-bar-fill { height:100%; background:var(--sage); border-radius:2px; transition:width .3s; }
+.morning-cards { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+.morning-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 16px; box-shadow:var(--shadow); transition:opacity .2s; }
+.morning-done { opacity:.55; }
+.morning-card-top { display:flex; gap:12px; align-items:flex-start; }
+.morning-icon { font-size:22px; line-height:1; min-width:28px; }
+.morning-card-body { flex:1; }
+.morning-label { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; margin-bottom:3px; }
+.morning-desc { font-size:12px; color:var(--text2); line-height:1.5; margin-bottom:6px; }
+.morning-link { font-size:12px; color:var(--lavender); font-family:'JetBrains Mono',monospace; text-decoration:none; }
+.morning-link:hover { text-decoration:underline; }
+.morning-check { width:28px; height:28px; border-radius:50%; border:2px solid var(--border); background:transparent; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; }
+.morning-check-done { background:var(--sage); border-color:var(--sage); color:#fff; }
+.morning-principles { background:var(--surface2); border-radius:var(--radius-lg); padding:14px 16px; }
+.morning-principles-title { font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
+.principle-item { font-size:13px; color:var(--text2); line-height:1.6; padding:3px 0; border-bottom:1px solid var(--border); }
+.principle-item:last-child { border-bottom:none; }
+/* end new tabs */
 .tz-converter { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px 24px; margin-bottom:16px; box-shadow:var(--shadow); }
 .tz-converter-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; margin-bottom:4px; }
 .tz-converter-sub { font-size:12px; color:var(--text2); margin-bottom:20px; line-height:1.6; }
@@ -472,6 +518,8 @@ body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); m
       <div class="nav-item" onclick="showView('ai')" id="nav-ai"><span class="nav-icon">✦</span><span class="nav-label">AI Reply</span></div>
       <div class="nav-item" onclick="showView('convert')" id="nav-convert"><span class="nav-icon">⇄</span><span class="nav-label">Convert TZ</span></div>
       <div class="nav-item" onclick="showView('study')" id="nav-study"><span class="nav-icon">◈</span><span class="nav-label">Study Plan</span></div>
+      <div class="nav-item" onclick="showView('jobs')" id="nav-jobs"><span class="nav-icon">⬡</span><span class="nav-label">Jobs</span></div>
+      <div class="nav-item" onclick="showView('morning')" id="nav-morning"><span class="nav-icon">☀</span><span class="nav-label">Morning</span></div>
     </nav>
     <div class="sidebar-bottom" id="sidebar-stats-container"></div>
   </div>
@@ -968,6 +1016,8 @@ function render() {
   else if(currentView==='analyze')  renderAnalyze();
   else if(currentView==='convert')  renderConvert();
   else if(currentView==='study')    renderStudyPlan();
+  else if(currentView==='jobs')     renderJobs();
+  else if(currentView==='morning')  renderMorning();
   else renderAI();
 }
 
@@ -992,9 +1042,9 @@ function updateSidebar() {
 
 function showView(v) {
   currentView = v;
-  ['tracker','calendar','analyze','ai','convert','study'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
+  ['tracker','calendar','analyze','ai','convert','study','jobs','morning'].forEach(x=>document.getElementById('nav-'+x).classList.remove('active'));
   document.getElementById('nav-'+v).classList.add('active');
-  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply',convert:'Time Converter',study:'Study Plan'}[v];
+  document.getElementById('page-title').textContent = {tracker:'Tracker',calendar:'Calendar',analyze:'Auto-Update',ai:'AI Reply',convert:'Time Converter',study:'Study Plan',jobs:'Jobs',morning:'Morning'}[v];
   document.getElementById('search-wrap').style.display    = v==='tracker' ? 'block' : 'none';
   document.getElementById('add-contact-btn').style.display = v==='tracker' ? 'inline-flex' : 'none';
   closePanel();
@@ -1781,6 +1831,170 @@ function renderStudyPlan() {
 }
 
 /* ── Timezone Converter ── */
+/* ── Jobs Tab ── */
+const TARGET_FIRMS = [
+  // sponsorship: true=yes, false=no, null=unknown
+  // priority: 'A','B','C'  | austin: bool | contacts: contact ids
+  {name:'BOK Financial / Bank of Texas',   url:'bokfinancial.com/careers',  roles:'ACT Commercial Banking Program',          sponsorship:null,  priority:'A', austin:false, contacts:[40,57,58,59,60,62,56], notes:'APPLYING — deadline Oct 30. Referral from Sovannah. 6 internal contacts.'},
+  {name:'Deloitte',                         url:'deloitte.com/us/careers',   roles:'M&A Data Analytics Analyst',              sponsorship:true,  priority:'A', austin:false, contacts:[15,12],                 notes:'APPLYING — closes Sept 20. Jesse Davila actively helping. Recruiting event Sept 11.'},
+  {name:'Resolution Economics',             url:'resolutioneconomics.com',   roles:'Economic / Litigation Consulting',        sponsorship:true,  priority:'A', austin:false, contacts:[61],                    notes:'Jeff Andrien confirmed they sponsor internationals and love MSF hires.'},
+  {name:'UTIMCO',                           url:'utimco.org/careers',        roles:'Investment Associate',                    sponsorship:null,  priority:'A', austin:true,  contacts:[41],                    notes:'Austin. Will Haynes is a warm contact — call scheduling.'},
+  {name:'Pimco Austin',                     url:'pimco.com/careers',         roles:'Portfolio Mgmt / Client Relations',       sponsorship:null,  priority:'A', austin:true,  contacts:[29,36,37,14],           notes:'Austin. Tess encouraged direct outreach to PM team. 4 contacts.'},
+  {name:'Texas Teachers Retirement System', url:'trs.texas.gov/careers',     roles:'Investment Rotational Program',           sponsorship:null,  priority:'A', austin:true,  contacts:[7],                     notes:'Austin. Aiden Huotari\'s top Plan B rec — 3-yr rotational, very prestigious.'},
+  {name:'Raymond James',                    url:'raymondjames.com/careers',  roles:'Energy IB Analyst',                       sponsorship:null,  priority:'B', austin:false, contacts:[2,18,34],               notes:'Houston. Strong MSF alumni placement. Marshall, Nick, Raleigh are warm contacts.'},
+  {name:'Goldman Sachs',                    url:'goldmansachs.com/careers',  roles:'IB Analyst / Finance',                   sponsorship:null,  priority:'B', austin:false, contacts:[1],                     notes:'Nabil Ahmed is MSF alum at GS — pending reconnect.'},
+  {name:'Houlihan Lokey',                   url:'hl.com/careers',            roles:'IB Analyst',                             sponsorship:null,  priority:'B', austin:false, contacts:[3],                     notes:'Middle-market IB. Emilee Masters is warm contact.'},
+  {name:'Tesla',                            url:'tesla.com/careers',         roles:'Finance / FP&A',                         sponsorship:true,  priority:'B', austin:true,  contacts:[],                      notes:'Austin HQ. Personal contact — leverage directly.'},
+  {name:'Apple',                            url:'apple.com/careers',         roles:'Finance / Operations',                   sponsorship:true,  priority:'B', austin:true,  contacts:[],                      notes:'Austin office. Personal contact — leverage directly.'},
+  {name:'AMD',                              url:'amd.com/careers',           roles:'Finance / Operations',                   sponsorship:true,  priority:'B', austin:true,  contacts:[],                      notes:'Austin office. Personal contact — leverage directly.'},
+  {name:'Kroll',                            url:'kroll.com/careers',         roles:'Energy Advisory / Valuation',            sponsorship:null,  priority:'B', austin:false, contacts:[32],                    notes:'Dave Scott is warm contact. IB-adjacent restructuring and valuation.'},
+  {name:'RBC Wealth Management',            url:'rbc.com/careers',          roles:'Fixed Income / Structured Products',     sponsorship:null,  priority:'B', austin:false, contacts:[23],                    notes:'Aiden Huotari is a done contact — strong referral potential.'},
+  {name:'Morgan Stanley',                   url:'morganstanley.com/careers', roles:'PWM / Finance',                          sponsorship:null,  priority:'C', austin:false, contacts:[47],                    notes:'Rachel Hamblen is a warm contact in PWM Houston.'},
+  {name:'UBS',                              url:'ubs.com/careers',           roles:'Financial Advisor / Finance',            sponsorship:null,  priority:'C', austin:false, contacts:[48],                    notes:'Leslie Gunawan is a warm contact in Dallas.'},
+  {name:'Fifth Third Bank',                 url:'53.com/careers',            roles:'Commercial Banking / Credit',            sponsorship:null,  priority:'C', austin:false, contacts:[45],                    notes:'Jeff Susman is MSF Advisory Council — warm contact.'},
+  {name:'Huntington Bank',                  url:'huntington.com/careers',    roles:'Energy Finance',                         sponsorship:null,  priority:'C', austin:false, contacts:[24],                    notes:'Randy Petersen — Head of Energy Finance. Call pending.'},
+  {name:'Wolfe Research',                   url:'wolferesearch.com/careers', roles:'Equity Research',                        sponsorship:null,  priority:'C', austin:false, contacts:[16],                    notes:'William Gage is warm contact. Call rescheduling pending.'},
+  {name:'J.P. Morgan',                      url:'jpmorgan.com/careers',      roles:'IB / Finance',                           sponsorship:false, priority:'C', austin:false, contacts:[4],                     notes:'Does NOT sponsor — confirmed by Nicolas Liva. Jeff Stadler is a Done contact.'},
+];
+
+function firmScore(f) {
+  let s = 0;
+  if(f.sponsorship===true)  s += 30;
+  if(f.sponsorship===null)  s += 10;
+  if(f.priority==='A')      s += 30;
+  if(f.priority==='B')      s += 20;
+  if(f.priority==='C')      s += 10;
+  s += Math.min(f.contacts.length, 5) * 8;
+  if(f.austin)              s += 15;
+  return s;
+}
+
+function renderJobs() {
+  document.getElementById('topbar-sub').textContent = 'ranked target firms — sponsorship · alumni · fit';
+  const sorted = [...TARGET_FIRMS].sort((a,b) => firmScore(b) - firmScore(a));
+  const rows = sorted.map(f => {
+    const score   = firmScore(f);
+    const spBadge = f.sponsorship===true  ? `<span class="badge-sponsor-yes">Sponsors ✓</span>`
+                  : f.sponsorship===false ? `<span class="badge-sponsor-no">No Sponsor ✗</span>`
+                  : `<span class="badge-sponsor-unk">Verify</span>`;
+    const priBadge = `<span class="badge-pri-${f.priority.toLowerCase()}">${f.priority}</span>`;
+    const austinBadge = f.austin ? `<span class="badge-austin">Austin ⬡</span>` : '';
+    const contactNames = f.contacts.map(id => {
+      const c = [...BUILTIN_CONTACTS,...customContacts].find(x=>x.id===id);
+      return c ? `<span class="firm-contact-chip">${c.name.split(' ')[0]}</span>` : '';
+    }).filter(Boolean).join('');
+    return `<div class="firm-row">
+      <div class="firm-row-top">
+        <div class="firm-name">${f.name}</div>
+        <div class="firm-badges">${priBadge}${spBadge}${austinBadge}</div>
+        <div class="firm-score">${score}</div>
+      </div>
+      <div class="firm-roles">${f.roles}</div>
+      ${contactNames ? `<div class="firm-contacts">${contactNames}</div>` : ''}
+      <div class="firm-notes">${f.notes}</div>
+      <a class="firm-link" href="https://${f.url}" target="_blank">→ Career page</a>
+    </div>`;
+  }).join('');
+  document.getElementById('content').innerHTML = `
+    <div class="jobs-wrap">
+      <div class="jobs-legend">
+        <span class="badge-pri-a">A</span> Priority apply &nbsp;
+        <span class="badge-pri-b">B</span> Active pipeline &nbsp;
+        <span class="badge-pri-c">C</span> Watch &nbsp;&nbsp;
+        <span class="badge-sponsor-yes">Sponsors ✓</span> confirmed &nbsp;
+        <span class="badge-sponsor-no">No Sponsor ✗</span> &nbsp;
+        <span class="badge-austin">Austin ⬡</span> Austin-based &nbsp;
+        <span style="font-size:11px;opacity:.5">Score = sponsorship + priority + alumni + location</span>
+      </div>
+      <div class="firms-list">${rows}</div>
+    </div>`;
+}
+
+/* ── Morning Tab ── */
+const MORNING_READS = [
+  {
+    label:'Bloomberg Markets',
+    url:'https://www.bloomberg.com/markets',
+    desc:'Top market news — scan headlines for energy, M&A, credit, and macro moves. 10 minutes.',
+    icon:'📈'
+  },
+  {
+    label:'Capital IQ Pro',
+    url:'https://www.capitaliq.spglobal.com',
+    desc:'McCombs library access. Check deal flow, company filings, and energy sector data. Enroll once for daily email digest.',
+    icon:'🏛'
+  },
+  {
+    label:'Sandy Leeds — Weekly Market Update',
+    url:'https://sandyleeds.com',
+    desc:'Former McCombs finance lecturer. Clear, practical weekly macro update. Subscribe for email delivery.',
+    icon:'📖'
+  }
+];
+
+function renderMorning() {
+  document.getElementById('topbar-sub').textContent = 'daily reading habit — markets · data · macro';
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const todayKey = new Date().toISOString().slice(0,10);
+
+  let checks = {};
+  try { checks = JSON.parse(localStorage.getItem('morning_checks')||'{}'); } catch(e){}
+  const todayChecks = checks[todayKey] || {};
+
+  const cards = MORNING_READS.map((r,i) => {
+    const done = !!todayChecks[i];
+    return `<div class="morning-card ${done?'morning-done':''}">
+      <div class="morning-card-top">
+        <span class="morning-icon">${r.icon}</span>
+        <div class="morning-card-body">
+          <div class="morning-label">${r.label}</div>
+          <div class="morning-desc">${r.desc}</div>
+          <a class="morning-link" href="${r.url}" target="_blank" onclick="markMorningRead(${i},'${todayKey}')">Open →</a>
+        </div>
+        <button class="morning-check ${done?'morning-check-done':''}" onclick="toggleMorningCheck(${i},'${todayKey}')">${done?'✓':''}</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const doneCount = Object.values(todayChecks).filter(Boolean).length;
+  const allDone   = doneCount === MORNING_READS.length;
+
+  document.getElementById('content').innerHTML = `
+    <div class="morning-wrap">
+      <div class="morning-header">
+        <div class="morning-date">${today}</div>
+        <div class="morning-progress-label">${allDone ? '✓ All done — you\'re ready for the day' : `${doneCount} of ${MORNING_READS.length} read`}</div>
+        <div class="morning-bar"><div class="morning-bar-fill" style="width:${Math.round(doneCount/MORNING_READS.length*100)}%"></div></div>
+      </div>
+      <div class="morning-cards">${cards}</div>
+      <div class="morning-principles">
+        <div class="morning-principles-title">Principles to carry today</div>
+        <div class="principle-item">Warm referrals beat cold outreach every time</div>
+        <div class="principle-item">Contact 3-4 people per target company</div>
+        <div class="principle-item">Finance is a body — banks are the veins</div>
+        <div class="principle-item">Stay in touch consistently, not just when you need something</div>
+        <div class="principle-item">Be driven, curious to learn, and positive</div>
+      </div>
+    </div>`;
+}
+
+function toggleMorningCheck(idx, dateKey) {
+  let checks = {};
+  try { checks = JSON.parse(localStorage.getItem('morning_checks')||'{}'); } catch(e){}
+  if(!checks[dateKey]) checks[dateKey] = {};
+  checks[dateKey][idx] = !checks[dateKey][idx];
+  localStorage.setItem('morning_checks', JSON.stringify(checks));
+  renderMorning();
+}
+function markMorningRead(idx, dateKey) {
+  let checks = {};
+  try { checks = JSON.parse(localStorage.getItem('morning_checks')||'{}'); } catch(e){}
+  if(!checks[dateKey]) checks[dateKey] = {};
+  checks[dateKey][idx] = true;
+  localStorage.setItem('morning_checks', JSON.stringify(checks));
+  renderMorning();
+}
+
 function renderConvert() {
   document.getElementById('topbar-sub').textContent = 'instant time zone conversion';
   const nowGST = new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'});
